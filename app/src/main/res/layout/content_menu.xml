@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_menu"
+    tools:context="com.maxmarchuk.boggle.MenuActivity"
+    android:background="#626465">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Boggle"
+        android:id="@+id/txtBoggle"
+        android:layout_marginTop="30dp"
+        android:textSize="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:text="1 Player"
+        android:id="@+id/btnOnePlayer"
+        android:layout_below="@+id/txtBoggle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:background="#a7a7a7"
+        android:textColor="#ffffff"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:text="2 Players"
+        android:id="@+id/btnTwoPlayers"
+        android:background="#a7a7a7"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/btnOnePlayer"
+        android:layout_alignStart="@+id/btnOnePlayer"
+        android:textColor="#ffffff"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:text="Online"
+        android:id="@+id/btnOnlinePlay"
+        android:background="#a7a7a7"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/btnTwoPlayers"
+        android:layout_alignStart="@+id/btnTwoPlayers"
+        android:textColor="#ffffff"
+        android:clickable="true" />
+
+</RelativeLayout>
