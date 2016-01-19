@@ -12,55 +12,73 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_menu"
     tools:context="com.maxmarchuk.boggle.MenuActivity"
-    android:background="#626465">
+    android:background="#88ABB9">
 
     <TextView
+        android:id="@+id/txtBoggle"
+        android:text="Boggle"
+        android:textSize="100dp"
+        android:textColor="#022735"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Boggle"
-        android:id="@+id/txtBoggle"
-        android:layout_marginTop="30dp"
-        android:textSize="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF" />
+    />
 
     <Button
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:text="1 Player"
         android:id="@+id/btnOnePlayer"
-        android:layout_below="@+id/txtBoggle"
+        android:background="#103E50"
+
+        android:text="1 Player"
+        android:textColor="#88ABB9"
+        android:textStyle="bold"
+
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/btnTwoPlayers"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:background="#a7a7a7"
-        android:textColor="#ffffff"
+
         android:clickable="true"
-        android:onClick="goToSinglePlayer"/>
+        android:onClick="goToSinglePlayer"
+        />
 
     <Button
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:text="2 Players"
         android:id="@+id/btnTwoPlayers"
-        android:background="#a7a7a7"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/btnOnePlayer"
-        android:layout_alignStart="@+id/btnOnePlayer"
-        android:textColor="#ffffff"
-        android:clickable="true" />
+        android:background="#103E50"
 
-    <Button
+        android:text="2 Players"
+        android:textColor="#88ABB9"
+        android:textStyle="bold"
+
         android:layout_width="300dp"
         android:layout_height="80dp"
-        android:text="Online"
+        android:layout_above="@+id/btnOnlinePlay"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+
+
+        android:clickable="true"
+        />
+
+    <Button
         android:id="@+id/btnOnlinePlay"
-        android:background="#a7a7a7"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/btnTwoPlayers"
-        android:layout_alignStart="@+id/btnTwoPlayers"
-        android:textColor="#ffffff"
-        android:clickable="true" />
+        android:background="#103E50"
+
+        android:text="Online"
+        android:textColor="#88ABB9"
+        android:textStyle="bold"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+
+        android:clickable="true"
+    />
 
 </RelativeLayout>
