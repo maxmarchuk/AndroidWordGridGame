@@ -11,24 +11,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.maxmarchuk.boggle.SinglePlayer"
     tools:showIn="@layout/activity_single_player"
-    android:background="#626465">
+    android:background="#626465"
+>
 
 
-    <TableLayout
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="75dp"
-        android:layout_gravity="center"
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
-
-        <TableRow
-            android:layout_width=""
-            android:layout_height="match_parent">
-            <EditText
-                android:id="@+id/txtUserName"
-            />
-        </TableRow>
-
-    </TableLayout>
+        android:columnWidth="60dp"
+        android:numColumns="4"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/white"
+    >
+    </GridView>
 </RelativeLayout>
