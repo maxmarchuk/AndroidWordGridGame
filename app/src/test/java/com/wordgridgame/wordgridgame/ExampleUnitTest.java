@@ -1,4 +1,4 @@
-package com.maxmarchuk.boggle;
+package com.wordgridgame.wordgridgame;
 
 import org.junit.Test;
 

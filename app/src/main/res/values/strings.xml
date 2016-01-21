@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Boggle</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_single_player">SinglePlayer</string>
+    <string name="app_name">WordGridGame</string>
+    <string name="title_activity_single_player">SinglePlayerActivity</string>
 </resources>

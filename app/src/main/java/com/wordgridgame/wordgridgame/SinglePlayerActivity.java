@@ -1,4 +1,4 @@
-package com.maxmarchuk.boggle;
+package com.wordgridgame.wordgridgame;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,10 +7,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.Toast;
 
-public class SinglePlayer extends AppCompatActivity {
+public class SinglePlayerActivity extends AppCompatActivity {
 
     GridView letterGrid;
 
@@ -31,33 +33,12 @@ public class SinglePlayer extends AppCompatActivity {
         letterGrid = (GridView) findViewById(R.id.gridView);
         letterGrid.setBackgroundColor(Color.parseColor("#a7a7a7a7"));
         letterGrid.setAdapter(adapter);
-    }
-
-    private void startGame() {
-        // start the timer
-
-        populateGrid();
-
-        //
-    }
-
-    private void populateGrid() {
-        // import the file?
-
-        // Run the algorithm to return a 4x4 grid of letters
-
-        // populate the GridView (letterGrid) with the letters
-    }
-
-
-    // Start the game timer
-    private void startTimer() {
-
-    }
-
-    // Stop the game timer
-    private void stopTimer() {
-
+        letterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(), "You clicked on " + letters[position], Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
