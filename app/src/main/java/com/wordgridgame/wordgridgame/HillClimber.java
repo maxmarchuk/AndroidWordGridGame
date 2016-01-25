@@ -1,66 +1,70 @@
 package com.wordgridgame.wordgridgame;
 
+import java.util.ArrayList;
+
 /**
  * Created by lyf on 2016/1/22.
  * Hill climbing algorithm for generating grid.
  */
 public class HillClimber {
-    char[][] grid;
-    boolean[][] hasBeenHit;
+    Board board;
     int wordsCount;
-    String soFar;
+    char[][] grid;
     void randomGrid(){
         char[][] temp=new char[4][4];
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++) {
                 temp[i][j] = (char) (Math.random() * (90 - 65 + 1) + 65);
-                hasBeenHit[i][j]=false;
             }
         }
         grid=temp;
     }
 
-    private void importList(){
-        //TODO import word list
-    }
 
-    //traverse the board to get current number of words
-    private void traverse(int i,int j){
-        if(hasBeenHit[i][j])
-            return;
-
-        soFar+=grid[i][j];
-        //TODO check if soFar is in word list
-
-        hasBeenHit[i][j]=true;
-
-    }
 
     //randomly mutate the board
-    private char[][] mutate()
+    private void mutate()
     {
-        char[][] newGrid=new char[4][4];
+        char[][] temp=board.toArray();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
                 if((int)(Math.random()*100)<10){
-                    newGrid[i][j]= (char) (Math.random() * (90 - 65 + 1) + 65);
-                }else{
-                    newGrid[i][j]=grid[i][j];
+                    board.board[i][j].letter  = (char) (Math.random() * (90 - 65 + 1) + 65);
                 }
             }
         }
-        return newGrid;
+        int newCount=board.getWords().size();
+        //recover board if total word count didn't increase
+        if(newCount<=wordsCount)
+            board.fromArray(temp);
+        else
+            wordsCount=newCount;
+
+
     }
 
-    public  char[][] climb()
+    public  Board climb()
     {
         randomGrid();
+        board=new Board(grid,"D:\\cs554\\havlicek-cs454t4\\bogglelex.txt");
         //begin climb
+        ArrayList<String> list =new ArrayList<String>();
         while(wordsCount<5) {
-            //TODO mutate the board
-
+            mutate();
+            list=board.getWords();
         }
-        return grid;
+        list=board.getWords();
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i));
+        }
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                System.out.print(" " +board.board[i][j].letter+" ");
+            }
+            System.out.println();
+        }
+
+        return board;
 
     }
 }
