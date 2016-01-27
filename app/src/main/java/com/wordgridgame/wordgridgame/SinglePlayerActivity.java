@@ -2,159 +2,155 @@ package com.wordgridgame.wordgridgame;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+        import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Dictionary;
+import java.util.HashMap;
+
 
 public class SinglePlayerActivity extends AppCompatActivity {
 
     GridView letterGrid;
-    EditText mainEditText;
     Button submitButton;
     Button clearButton;
     ListView mainListView;
     TextView playerScoreTextView;
     ArrayAdapter mArrayAdapter;
-    ArrayList mNameList = new ArrayList();
+    ArrayList mNameList;
+    HashMap<Integer, Integer> scoreMap;
+    HillClimber hc;
+    Board board = null;
+    char[][] twoDimArray;
+    TextView currentWordText;
+    ArrayList<String> letters;
 
-    static final String[] letters = new String[]{
-            "A", "B", "C", "D",
-            "E", "F", "G", "H",
-            "I", "J", "K", "L",
-            "M", "N", "O", "P"
-    };
+
+    private void init() {
+        currentWordText = (TextView) findViewById(R.id.currentWord);
+        mNameList = new ArrayList();
+        hc = new HillClimber();
+        letters = new ArrayList<String>();
+
+        // Grab activity elements
+        playerScoreTextView = (TextView) findViewById(R.id.players_score_textview);
+        mainListView = (ListView) findViewById(R.id.main_list_view);
+        submitButton = (Button) findViewById(R.id.submit_button);
+        clearButton = (Button) findViewById(R.id.clear_button);
+
+        mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mNameList);
+        mainListView.setAdapter(mArrayAdapter);
+
+
+        scoreMap = new HashMap<Integer, Integer>();
+        // Populate the score mapping
+        // *Key*: Word Length
+        // *Value*: Points
+        scoreMap.put(3, 1);
+        scoreMap.put(4, 1);
+        scoreMap.put(5, 2);
+        scoreMap.put(6, 3);
+        scoreMap.put(7, 5);
+        scoreMap.put(8, 11);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_single_player);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, letters);
+        //initialize everything
+        init();
 
+        //Populate the board
+        board = hc.climb();
+        twoDimArray = board.toArray();
+
+        //Convert the two dimensional array of characters to a list of characters
+        for (int i = 0; i < twoDimArray.length; i++) {
+            for (int j = 0; j < twoDimArray[i].length; j++) {
+                letters.add(String.valueOf(twoDimArray[i][j]));
+            }
+        }
+
+        //Set the gridview's data to new list of letters
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, letters);
         letterGrid = (GridView) findViewById(R.id.gridView);
         letterGrid.setBackgroundColor(Color.parseColor("#a7a7a7a7"));
         letterGrid.setAdapter(adapter);
+
+        //Set on click listener for each individual letter in the grid
+        //TODO: make sure that each letter clicked is a neighbor of the previous one
         letterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), "You clicked on " + letters[position], Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(), "Added letter " + letters.get(position), Toast.LENGTH_SHORT).show();
+                currentWordText.append(letters.get(position));
             }
         });
-        mainEditText =(EditText) findViewById(R.id.main_edit_text);
-        playerScoreTextView = (TextView) findViewById(R.id.players_score_textview);
-        submitButton = (Button) findViewById(R.id.submit_button);
+
+        // Submit Button Click Listener
+        // On clicking submit, get the word length and add its respective score to the total score
+        //Also add the word to the list of submitted words.
+        //TODO: Actually check the words for validity
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int num1;
-                mNameList.add(mainEditText.getText().toString());
-                mArrayAdapter.notifyDataSetChanged();
-                if (mainEditText.getText().toString().length() == 3) {
-                    String regexStr = "^[0-9]*$";
-                    if (playerScoreTextView.getText().toString().trim().matches(regexStr)) {
-                        String s1 = playerScoreTextView.getText().toString();
-                        num1 = Integer.parseInt(s1);
-                        num1 = num1 + 1;
-                        playerScoreTextView.setText(Integer.toString(num1));
-                    } else {
-                        playerScoreTextView.setText(Integer.toString(1));
-                    }
-
-                } else if (mainEditText.getText().toString().length() == 5) {
-                    String regexStr = "^[0-9]*$";
-                    if (playerScoreTextView.getText().toString().trim().matches(regexStr)) {
-                        String s1 = playerScoreTextView.getText().toString();
-                        num1 = Integer.parseInt(s1);
-                        num1 = num1 + 2;
-                        playerScoreTextView.setText(Integer.toString(num1));
-                    } else {
-                        playerScoreTextView.setText(Integer.toString(2));
-                    }
-
-                } else if (mainEditText.getText().toString().length() == 6) {
-                    String regexStr = "^[0-9]*$";
-                    if (playerScoreTextView.getText().toString().trim().matches(regexStr)) {
-                        String s1 = playerScoreTextView.getText().toString();
-                        num1 = Integer.parseInt(s1);
-                        num1 = num1 + 3;
-                        playerScoreTextView.setText(Integer.toString(num1));
-                    } else {
-                        playerScoreTextView.setText(Integer.toString(3));
-                    }
-
-                } else if (mainEditText.getText().toString().length() == 7) {
-                    String regexStr = "^[0-9]*$";
-                    if (playerScoreTextView.getText().toString().trim().matches(regexStr)) {
-                        String s1 = playerScoreTextView.getText().toString();
-                        num1 = Integer.parseInt(s1);
-                        num1 = num1 + 5;
-                        playerScoreTextView.setText(Integer.toString(num1));
-                    } else {
-                        playerScoreTextView.setText(Integer.toString(5));
-                    }
-
-                } else if (mainEditText.getText().toString().length() > 7) {
-                    String regexStr = "^[0-9]*$";
-                    if (playerScoreTextView.getText().toString().trim().matches(regexStr)) {
-                        String s1 = playerScoreTextView.getText().toString();
-                        num1 = Integer.parseInt(s1);
-                        num1 = num1 + 11;
-                        playerScoreTextView.setText(Integer.toString(num1));
-                    } else {
-                        playerScoreTextView.setText(Integer.toString(11));
-                    }
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Not a long enough word!", Toast.LENGTH_LONG).show();
-                }
-
-
+                String submittedWord = currentWordText.getText().toString();
+                boolean validWord = addWord(submittedWord);
             }
         });
 
-            clearButton=(Button)
-
-            findViewById(R.id.clear_button);
-
-            clearButton.setOnClickListener(new View.OnClickListener()
-
-            {
-                @Override
-                public void onClick (View v){
-                int count = mArrayAdapter.getCount();
-                mArrayAdapter.remove(mArrayAdapter.getItem((count - 1)));
-                mArrayAdapter.notifyDataSetChanged();
-            }
-            }
-
-            );
-            mainListView=(ListView) findViewById(R.id.main_list_view);
-
-            mArrayAdapter=new ArrayAdapter(this,
-                         android.R.layout.simple_list_item_1,
-                         mNameList);
-
-// Set the ListView to use the ArrayAdapter
-            mainListView.setAdapter(mArrayAdapter);
-
-
+        // On clicking clear button, empty the current word
+        clearButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        currentWordText.setText("");
+                    }
+                }
+        );
 
     }
 
+    private boolean addWord(String word) {
+        int length = word.length();
+        int currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
 
+        // Check word lengths
+        if(length == 0){
+            Toast.makeText(getApplicationContext(), "Please input a character sequence", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(length <= 2){
+            Toast.makeText(getApplicationContext(), "Word must be longer than 2 letters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(length <= 8){
+            currentScore += scoreMap.get(length);
+            playerScoreTextView.setText(String.valueOf(currentScore));
+        }
+        else {
+            currentScore += 11;
+            playerScoreTextView.setText(String.valueOf(currentScore));
+        }
+
+        //TODO: Check if word is valid
+
+        mNameList.add(word);
+        mArrayAdapter.notifyDataSetChanged();
+
+        return true;
     }
+
+
+}

@@ -1,6 +1,9 @@
 package com.wordgridgame.wordgridgame;
 
+import android.os.Environment;
+
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
@@ -80,13 +83,15 @@ public class Board {
         fromArray(grid);
         try {
             String temp;
-            Scanner file = new Scanner(new File(wordListPath));
+            File sdcard = Environment.getExternalStorageDirectory();
+
+            Scanner file = new Scanner(new File(sdcard, "./ospd.txt"));
             while (file.hasNextLine()) {
                 temp = file.nextLine().toUpperCase();
                 this.dict.add(temp);
             }
-        }catch (FileNotFoundException e){
-            System.out.println("File not found");
+        }catch (Exception e){
+            System.out.println("File not found " + e.getMessage());
         }
     }
 
@@ -121,6 +126,5 @@ public class Board {
         return words;
 
     }
-
 
 }

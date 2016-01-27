@@ -46,7 +46,7 @@ public class HillClimber {
     public  Board climb()
     {
         randomGrid();
-        board=new Board(grid,"D:\\cs554\\havlicek-cs454t4\\bogglelex.txt");
+        board=new Board(grid,"/Users/mmarchuk/code/school/havlicek-cs454t4/ospd.txt");
         //begin climb
         ArrayList<String> list =new ArrayList<String>();
         while(wordsCount<5) {

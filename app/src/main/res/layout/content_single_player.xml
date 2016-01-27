@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,102 +7,120 @@
     tools:context=".MainActivity"
     android:background="#88ABB9">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/spTableLayout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
+        <TableRow android:background="@android:color/darker_gray">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="28dp"
+                android:text="Score: "/>
 
-        android:textStyle="bold"
-        android:text="@string/high_score"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28dp"
+                android:textStyle="bold"
+                android:text="0"
+                android:id="@+id/players_score_textview"/>
+        </TableRow>
+    </TableLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
-
-        android:textStyle="bold"
-        android:text="@string/player_score"
-        android:id="@+id/players_score_textview"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <GridView
-        android:id="@+id/gridView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:numColumns="4"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="20dp"
-        android:background="@android:color/white">
-    </GridView>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="20dp"
+    <RelativeLayout
+        android:layout_width="420dp"
+        android:layout_height="420dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@id/spTableLayout"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/gridBox"
+        >
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:layout_marginRight="20dp"
-            android:hint="@string/hint"
+            android:textSize="20dp"
             android:textStyle="bold"
-            android:id="@+id/main_edit_text"/>
+            android:id="@+id/currentWordLabel"
+            android:text="Word:" />
+        <TextView
+            android:layout_width="360dp"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@id/currentWordLabel"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/currentWord"
+            android:text="current word" />
 
-
-
-        </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_alignParentTop="true"
+            android:numColumns="4"
+            android:layout_marginTop="30dp"
+            android:background="#a7a7a7a7">
+        </GridView>
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:background= "#103E50"
-            android:textColor="#88ABB9"
-            android:textStyle="bold"
-            android:text="@string/button_submit"
-            android:id="@+id/submit_button"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:background= "#103E50"
-            android:textColor="#88ABB9"
-            android:textStyle="bold"
-            android:text="@string/button_clear"
-            android:id="@+id/clear_button"/>
-    </LinearLayout>
+            android:layout_height="110dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignRight="@id/gridView"
+            android:layout_alignLeft="@id/gridView"
+            android:layout_below="@id/gridView"
+            >
+            <Button
+                android:layout_width="105dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:background= "#103E50"
+                android:textColor="#88ABB9"
+                android:textStyle="bold"
+                android:text="Submit"
+                android:id="@+id/submit_button"/>
+            <Button
+                android:layout_width="105dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:background= "#103E50"
+                android:textColor="#88ABB9"
+                android:textStyle="bold"
+                android:text="Clear"
+                android:id="@+id/clear_button"/>
+
+
+            <Button
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/submit_button"
+                android:layout_marginTop="10dp"
+                android:background= "#103E50"
+                android:textColor="#88ABB9"
+                android:textStyle="bold"
+                android:text="Done"
+                android:id="@+id/done_button"/>
+        </RelativeLayout>
+
 
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="120dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="30dp"
+            android:minHeight="20dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_weight="1"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
             android:textStyle="bold"
             android:id="@+id/main_list_view"/>
 
-
-
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
