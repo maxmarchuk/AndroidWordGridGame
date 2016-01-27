@@ -8,13 +8,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.wordgridgame.wordgridgame.MainMenuActivity"
-    android:background="#88ABB9">
+    android:background="@color/primary_dark"
+    >
 
     <TextView
         android:id="@+id/txtBoggle"
         android:text="Boggle"
         android:textSize="100dp"
-        android:textColor="#022735"
+        android:textColor="@color/accent"
         android:textAppearance="?android:attr/textAppearanceLarge"
 
         android:layout_alignParentTop="true"
@@ -26,10 +27,10 @@
 
     <Button
         android:id="@+id/btnOnePlayer"
-        android:background="#103E50"
+        android:background="@color/accent"
+        android:textColor="@color/primary_text"
 
         android:text="1 Player"
-        android:textColor="#88ABB9"
         android:textStyle="bold"
 
         android:layout_width="300dp"
@@ -43,10 +44,10 @@
 
     <Button
         android:id="@+id/btnTwoPlayers"
-        android:background="#103E50"
+        android:background="@color/accent"
+        android:textColor="@color/primary_text"
 
         android:text="2 Players"
-        android:textColor="#88ABB9"
         android:textStyle="bold"
 
         android:layout_width="300dp"
@@ -55,16 +56,16 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
 
-
         android:clickable="true"
         />
 
     <Button
         android:id="@+id/btnOnlinePlay"
-        android:background="#103E50"
+        android:background="@color/accent"
+        android:textColor="@color/primary_text"
+
 
         android:text="Online"
-        android:textColor="#88ABB9"
         android:textStyle="bold"
 
         android:layout_alignParentBottom="true"

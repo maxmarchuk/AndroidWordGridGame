@@ -3,124 +3,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_dark"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background="#88ABB9">
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/spTableLayout">
-
-        <TableRow android:background="@android:color/darker_gray">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="28dp"
-                android:text="Score: "/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="28dp"
-                android:textStyle="bold"
-                android:text="0"
-                android:id="@+id/players_score_textview"/>
-        </TableRow>
-    </TableLayout>
+    tools:context=".MainActivity">
 
     <RelativeLayout
-        android:layout_width="420dp"
-        android:layout_height="420dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_alignTop="@id/spTableLayout"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/gridBox"
-        >
-        <TextView
-            android:layout_width="60dp"
+        android:id="@+id/gameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <TableLayout
+            android:id="@+id/scoreContainer"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginRight="20dp"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:id="@+id/currentWordLabel"
-            android:text="Word:" />
-        <TextView
-            android:layout_width="360dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/currentWordLabel"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:id="@+id/currentWord"
-            android:text="current word" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/txtPlayerScoreLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Score: "
+                    android:textColor="@color/accent"
+                    android:textSize="28dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtPlayerScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/accent"
+                    android:textSize="28dp"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
 
         <GridView
             android:id="@+id/gridView"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/scoreContainer"
+            android:background="@color/primary"
+            android:gravity="center"
             android:numColumns="4"
-            android:layout_marginTop="30dp"
-            android:background="#a7a7a7a7">
-        </GridView>
+            />
+
+        <TextView
+            android:id="@+id/txtCurrentWordLabel"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignLeft="@id/gridView"
+            android:layout_below="@+id/gridView"
+            android:layout_marginRight="5dp"
+            android:text="Word:"
+            android:textColor="@color/primary_light"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtCurrentWord"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gridView"
+            android:layout_toEndOf="@id/txtCurrentWordLabel"
+            android:textColor="@color/primary_light"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
         <RelativeLayout
+            android:id="@+id/gridButtons"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignRight="@id/gridView"
             android:layout_alignLeft="@id/gridView"
-            android:layout_below="@id/gridView"
-            >
+            android:layout_alignRight="@id/gridView"
+            android:layout_alignParentBottom="true">
+
             <Button
-                android:layout_width="105dp"
+                android:id="@+id/btnSubmit"
+                android:layout_width="95dp"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:background= "#103E50"
-                android:textColor="#88ABB9"
-                android:textStyle="bold"
+                android:background="@color/accent"
                 android:text="Submit"
-                android:id="@+id/submit_button"/>
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
+
             <Button
-                android:layout_width="105dp"
+                android:id="@+id/btnClear"
+                android:layout_width="95dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
-                android:background= "#103E50"
-                android:textColor="#88ABB9"
-                android:textStyle="bold"
+                android:background="@color/accent"
                 android:text="Clear"
-                android:id="@+id/clear_button"/>
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
 
 
             <Button
-                android:layout_width="220dp"
+                android:id="@+id/btnDone"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/submit_button"
+                android:layout_below="@id/btnSubmit"
                 android:layout_marginTop="10dp"
-                android:background= "#103E50"
-                android:textColor="#88ABB9"
-                android:textStyle="bold"
+                android:background="@color/accent"
                 android:text="Done"
-                android:id="@+id/done_button"/>
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
         <ListView
-            android:layout_width="120dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="30dp"
+            android:id="@+id/listSubmittedWords"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/gridButtons"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/scoreContainer"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@color/primary"
             android:minHeight="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_weight="1"
-            android:layout_alignParentRight="true"
-            android:textStyle="bold"
-            android:id="@+id/main_list_view"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </RelativeLayout>

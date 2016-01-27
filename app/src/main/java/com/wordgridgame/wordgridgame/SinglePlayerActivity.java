@@ -4,16 +4,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-        import android.widget.Button;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 
@@ -35,16 +35,16 @@ public class SinglePlayerActivity extends AppCompatActivity {
 
 
     private void init() {
-        currentWordText = (TextView) findViewById(R.id.currentWord);
+        currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         mNameList = new ArrayList();
         hc = new HillClimber();
         letters = new ArrayList<String>();
 
         // Grab activity elements
-        playerScoreTextView = (TextView) findViewById(R.id.players_score_textview);
-        mainListView = (ListView) findViewById(R.id.main_list_view);
-        submitButton = (Button) findViewById(R.id.submit_button);
-        clearButton = (Button) findViewById(R.id.clear_button);
+        playerScoreTextView = (TextView) findViewById(R.id.txtPlayerScore);
+        mainListView = (ListView) findViewById(R.id.listSubmittedWords);
+        submitButton = (Button) findViewById(R.id.btnSubmit);
+        clearButton = (Button) findViewById(R.id.btnClear);
 
         mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
@@ -84,15 +84,15 @@ public class SinglePlayerActivity extends AppCompatActivity {
         //Set the gridview's data to new list of letters
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, letters);
         letterGrid = (GridView) findViewById(R.id.gridView);
-        letterGrid.setBackgroundColor(Color.parseColor("#a7a7a7a7"));
         letterGrid.setAdapter(adapter);
 
         //Set on click listener for each individual letter in the grid
         //TODO: make sure that each letter clicked is a neighbor of the previous one
         letterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getBaseContext(), "Added letter " + letters.get(position), Toast.LENGTH_SHORT).show();
+                view.setBackgroundColor(getResources().getColor(R.color.accent));
                 currentWordText.append(letters.get(position));
             }
         });
@@ -107,6 +107,13 @@ public class SinglePlayerActivity extends AppCompatActivity {
                 int num1;
                 String submittedWord = currentWordText.getText().toString();
                 boolean validWord = addWord(submittedWord);
+
+                // If the words was valid, we know it's already added to the
+                // word list so we can clear the current word text
+                if (validWord) {
+                    currentWordText.setText("");
+                    resetGridCellColors();
+                }
             }
         });
 
@@ -116,6 +123,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         currentWordText.setText("");
+                        resetGridCellColors();
                     }
                 }
         );
@@ -135,6 +143,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Word must be longer than 2 letters", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         else if(length <= 8){
             currentScore += scoreMap.get(length);
             playerScoreTextView.setText(String.valueOf(currentScore));
@@ -152,5 +161,12 @@ public class SinglePlayerActivity extends AppCompatActivity {
         return true;
     }
 
+    private void resetGridCellColors() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, letters);
 
+        for(int i=0; i < adapter.getCount(); i++){
+            View v = letterGrid.getChildAt(i);
+            v.setBackgroundColor(getResources().getColor(R.color.primary));
+        }
+    }
 }
