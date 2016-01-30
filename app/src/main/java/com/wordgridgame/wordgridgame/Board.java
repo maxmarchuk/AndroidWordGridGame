@@ -85,7 +85,7 @@ public class Board {
             String temp;
             File sdcard = Environment.getExternalStorageDirectory();
 
-            Scanner file = new Scanner(new File(sdcard, "./ospd.txt"));
+            Scanner file = new Scanner(new File(sdcard, "ospd.txt"));
             while (file.hasNextLine()) {
                 temp = file.nextLine().toUpperCase();
                 this.dict.add(temp);
