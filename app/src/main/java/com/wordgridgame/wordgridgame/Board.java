@@ -2,8 +2,6 @@ package com.wordgridgame.wordgridgame;
 
 import android.os.Environment;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
@@ -70,13 +68,10 @@ public class Board {
                 board[X+1][Y+1].traverse(soFar);
             hasBeenHit=false;
         }
-
-
-
     }
     public Letter[][] board;
     private ArrayList<String> dict=new ArrayList<String>();
-    private ArrayList<String> words=new ArrayList<String>();
+    public ArrayList<String> words=new ArrayList<String>();
     public Board(char[][] grid,String wordListPath)
     {
         board=new Letter[4][4];

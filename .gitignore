@@ -40,3 +40,7 @@ Thumbs.db
 .idea/tasks.xml
 .idea/datasources.xml
 .idea/dataSources.ids
+
+.idea/libraries/hamcrest_core_1_3.xml
+.idea/libraries/junit_4_12.xml
+.idea/runConfigurations.xml
