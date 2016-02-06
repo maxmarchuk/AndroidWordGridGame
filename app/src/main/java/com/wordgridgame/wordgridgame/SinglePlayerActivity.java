@@ -163,6 +163,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
     }
 
     private void resetGridCellColors() {
+        System.out.println("Testing reset 2");
         for (int i = 0; i < letterGrid.getChildCount(); i++) {
             Button btn = (Button) letterGrid.getChildAt(i);
             btn.setBackgroundResource(R.drawable.bluebutton9patch);
