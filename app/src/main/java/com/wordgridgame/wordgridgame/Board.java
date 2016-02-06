@@ -87,6 +87,7 @@ public class Board {
             }
         }catch (Exception e){
             System.out.println("File not found " + e.getMessage());
+            System.out.println("test");
         }
     }
 
