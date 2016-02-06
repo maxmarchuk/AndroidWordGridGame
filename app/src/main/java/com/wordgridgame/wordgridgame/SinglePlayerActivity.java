@@ -1,6 +1,7 @@
 package com.wordgridgame.wordgridgame;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,6 +29,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
     Board board = null;
     TextView currentWordText;
     ArrayList<String> letters;
+    TextView timerText;
 
 
     private void init() {
@@ -44,6 +46,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
 
         mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
+        timerText = (TextView) findViewById(R.id.txtTimer);
 
 
         // Populate the score mapping
@@ -70,6 +73,17 @@ public class SinglePlayerActivity extends AppCompatActivity {
         board = hc.climb();
 
         adaptBoardToCharList();
+
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timerText.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+               timerText.setText("done!");
+            }
+        }.start();
 
         //Set the gridview's data to new list of letters
         letterGrid = (GridLayout) findViewById(R.id.gridLayout);
