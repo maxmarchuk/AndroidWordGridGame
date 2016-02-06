@@ -10,6 +10,10 @@ import java.util.Scanner;
  * Created by lyf on 2016/1/25.
  */
 public class Board {
+    public Letter[][] board;
+    private ArrayList<String> dict=new ArrayList<String>();
+    public ArrayList<String> words=new ArrayList<String>();
+
     class Letter {
         public char letter;
         public int X;
@@ -25,9 +29,6 @@ public class Board {
 
         public void traverse(String soFar)
         {
-            System.out.println("TRAVERSING");
-            if(words.size() > 5)
-                return;
             if(hasBeenHit)
                 return;
             soFar+=this.letter;
@@ -72,9 +73,7 @@ public class Board {
             hasBeenHit=false;
         }
     }
-    public Letter[][] board;
-    private ArrayList<String> dict=new ArrayList<String>();
-    public ArrayList<String> words=new ArrayList<String>();
+
     public Board(char[][] grid,String wordListPath)
     {
         board=new Letter[4][4];
