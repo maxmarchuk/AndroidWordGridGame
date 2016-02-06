@@ -25,6 +25,9 @@ public class Board {
 
         public void traverse(String soFar)
         {
+            System.out.println("TRAVERSING");
+            if(words.size() > 5)
+                return;
             if(hasBeenHit)
                 return;
             soFar+=this.letter;
