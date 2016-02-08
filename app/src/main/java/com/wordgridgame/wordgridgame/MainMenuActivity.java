@@ -19,4 +19,8 @@ public class MainMenuActivity extends Activity {
         startActivity(intent);
     }
 
+    public void goToHighScoresActivity(View view){
+        Intent intent=new Intent(getApplicationContext(),HighScoresActivity.class);
+        startActivity(intent);
+    }
 }
