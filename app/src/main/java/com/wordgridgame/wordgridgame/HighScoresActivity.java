@@ -1,9 +1,9 @@
 package com.wordgridgame.wordgridgame;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 
-public class HighScoresActivity extends AppCompatActivity {
+public class HighScoresActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

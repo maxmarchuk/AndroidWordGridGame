@@ -1,8 +1,8 @@
 package com.wordgridgame.wordgridgame;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SinglePlayerActivity extends AppCompatActivity {
+public class SinglePlayerActivity extends Activity {
 
     GridLayout letterGrid;
     Button submitButton;

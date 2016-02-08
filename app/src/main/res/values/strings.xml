@@ -7,4 +7,8 @@
     <string name="button_clear">Clear</string>
     <string name="hint">A word</string>
 
+    <string name="title_activity_play_menu">playMenuActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>

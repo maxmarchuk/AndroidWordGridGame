@@ -11,7 +11,7 @@
         android:supportsRtl="true">
         <activity
             android:name=".MainMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,9 +20,12 @@
         </activity>
         <activity
             android:name=".SinglePlayerActivity"
-            android:label="@string/title_activity_single_player"
-            android:theme="@style/single_player_activity_style"></activity>
-        <activity android:name=".HighScoresActivity"></activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".HighScoresActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity android:name=".PlayMainMenuActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 
 </manifest>

@@ -7,9 +7,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.wordgridgame.wordgridgame.MainMenuActivity"
     android:background="@color/primary_dark"
-    >
+    tools:context="com.wordgridgame.wordgridgame.PlayMainMenuActivity">
+
 
     <TextView
         android:id="@+id/txtBoggle"
@@ -26,33 +26,33 @@
         />
 
     <Button
-        android:id="@+id/btnPlay"
+        android:id="@+id/btnOnePlayer"
         android:background="@drawable/yellowbutton9patch"
         android:textColor="@color/primary_text"
 
-        android:text="Play"
+        android:text="1 Player"
         android:textStyle="bold"
 
         android:layout_width="300dp"
         android:layout_height="80dp"
-        android:layout_above="@+id/btnHighScores"
+        android:layout_above="@+id/btnTwoPlayers"
         android:layout_centerHorizontal="true"
 
         android:clickable="true"
-        android:onClick="goToPlayActivity"
+        android:onClick="goToSinglePlayer"
         />
 
     <Button
-        android:id="@+id/btnHighScores"
+        android:id="@+id/btnTwoPlayers"
         android:background="@drawable/yellowbutton9patch"
         android:textColor="@color/primary_text"
 
-        android:text="High Scores"
+        android:text="2 Players"
         android:textStyle="bold"
 
         android:layout_width="300dp"
         android:layout_height="80dp"
-        android:layout_above="@+id/btnHelp"
+        android:layout_above="@+id/btnOnlinePlay"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
 
@@ -60,12 +60,12 @@
         />
 
     <Button
-        android:id="@+id/btnHelp"
+        android:id="@+id/btnOnlinePlay"
         android:background="@drawable/yellowbutton9patch"
         android:textColor="@color/primary_text"
 
 
-        android:text="Help"
+        android:text="Online"
         android:textStyle="bold"
 
         android:layout_alignParentBottom="true"

@@ -43,8 +43,11 @@ public class Board {
             }
             if(!startWith)
                 return;
-            if(dict.contains(soFar) && !words.contains(soFar))
-                words.add(soFar);
+            if(dict.contains(soFar) && !words.contains(soFar)) {
+                if(soFar.length() > 2) {
+                    words.add(soFar);
+                }
+            }
             hasBeenHit=true;
             //traverse letter above
             if(Y>0)
