@@ -9,4 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.wordgridgame.wordgridgame.HighScoresActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:text="HIGH SCORES"
+        android:textSize="50dp"
+        android:textColor="@color/accent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="91dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtScores"
+        android:textSize="60dp"
+        android:textColor="@color/accent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
