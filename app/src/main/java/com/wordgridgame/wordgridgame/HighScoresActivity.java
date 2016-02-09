@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,14 +20,13 @@ public class HighScoresActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_scores);
 
-        Map<String,Integer> scores=PlayerInfoHelper.GetHiscores();
+
         TextView scoreTxt=(TextView)findViewById(R.id.txtScores);
         String hiscores="";
-        List<Map.Entry<String, Integer>> list =
-                new LinkedList<>( scores.entrySet() );
-        for(int i=0;i<scores.size();i++)
-        {
-            hiscores+=list.get(i).getKey()+"  "+list.get(i).getValue().toString()+"\n";
+        ArrayList<String> list= PlayerInfoHelper.GetHiscores();
+        for(int i=0;i<list.size();i++) {
+            String[] temp = list.get(i).split(",");
+            hiscores += temp[0]+ " " + temp[1]+"\n";
 
         }
         scoreTxt.setText(hiscores);

@@ -3,6 +3,8 @@ package com.wordgridgame.wordgridgame;
 import android.os.Environment;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,22 +25,21 @@ public class PlayerInfoHelper {
     static Integer hiscoresCount=5;
     static String currentPlayerName="default";
     //get hiscores from txt file
-    public static Map<String,Integer> GetHiscores(){
-        Map<String,Integer> map=new HashMap<>();
+    public static ArrayList<String> GetHiscores(){
+        ArrayList<String> list=new ArrayList<>();
 
         try {
             String temp;
             File sdcard = Environment.getExternalStorageDirectory();
-            System.out.println( Environment.getExternalStorageDirectory().toString());
             Scanner file = new Scanner(new File(sdcard, "hiscores.txt"));
-
+            //Scanner file=new Scanner(new File("D:\\cs554\\havlicek-cs454t4\\hiscores.txt"));
             while (file.hasNextLine()) {
                 temp = file.nextLine().toUpperCase();
-                String[] str=temp.split(",");
-                map.put(str[0],Integer.parseInt(str[1]));
+                list.add(temp);
+
             }
-            map=sortByValue(map);
-            return map;
+            sortByValue(list);
+            return list;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -46,54 +47,61 @@ public class PlayerInfoHelper {
     }
 
     //check if player reaches a new high score
-    public static Boolean ifNewScore(Integer score){
-        Map<String,Integer> map= GetHiscores();
-        if(map.get(hiscoresCount-1)<score)
-            return true;
-        else
-            return false;
+    public static Boolean isNewScore(Integer score){
+        ArrayList<String> list= GetHiscores();
+        for(int i=0;i<list.size();i++)
+        {
+            int temp =Integer.parseInt(list.get(i).split(",")[1]);
+            if(score>temp){
+                return true;
+            }
+
+        }
+        return false;
     }
 
     //add new score to the hiscores
-    public static Map<String,Integer> addNewScore(String userName,Integer score)
+    public static  ArrayList<String> addNewScore(Integer score)
     {
-        Map<String,Integer> map=new HashMap<String,Integer>();
-        map=GetHiscores();
-        map.put(userName,score);
-        map=sortByValue(map);
+        ArrayList<String> list= GetHiscores();
+        //add score to list
+        list.add(currentPlayerName+","+score.toString());
 
-        Map<String,Integer> newMap=new LinkedHashMap<String,Integer>();
-        List<Map.Entry<String, Integer>> list =
-                new LinkedList<>( map.entrySet() );
-        for(int i=0;i<hiscoresCount;i++)
+        //remove the lowest score
+        int lowestIndex=0;
+        for(int i=0;i<list.size();i++)
         {
-            newMap.put(list.get(i).getKey(), list.get(i).getValue());
+            if(Integer.parseInt(list.get(i).split(",")[1])<Integer.parseInt(list.get(lowestIndex).split(",")[1]))
+                lowestIndex=i;
         }
-        return newMap;
+        list.remove(lowestIndex);
+        try {
+            //
+            File sdcard = Environment.getExternalStorageDirectory();
+            PrintWriter writer = new PrintWriter(new File(sdcard, "hiscores.txt"));
+            for(int i=0;i<list.size();i++)
+                writer.println(list.get(i));
+            writer.close();
+
+        }catch (Exception e){System.out.println(e.toString());}
+
+        return list;
 
 
     }
 
-    private static <K, V extends Comparable<? super V>> Map<K, V>
-    sortByValue( Map<K, V> map )
-    {
-        List<Map.Entry<K, V>> list =
-                new LinkedList<>( map.entrySet() );
-        Collections.sort( list, new Comparator<Map.Entry<K, V>>()
-        {
-            @Override
-            public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
-            {
-                return (o2.getValue()).compareTo( o1.getValue() );
+    private  static void sortByValue(ArrayList<String> list){
+        for(int i=0;i<list.size();i++){
+            for(int j=i+1;j< list.size();j++){
+                if(Integer.parseInt(list.get(i).split(",")[1])<Integer.parseInt(list.get(j).split(",")[1])){
+                     String temp=list.get(i);
+                     list.set(i,list.get(j));
+                     list.set(j,temp);
+                }
             }
-        } );
-
-        Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list)
-        {
-            result.put( entry.getKey(), entry.getValue() );
         }
-        return result;
+
+
     }
 
 }
