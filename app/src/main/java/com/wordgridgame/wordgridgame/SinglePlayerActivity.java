@@ -1,11 +1,15 @@
 package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ public class SinglePlayerActivity extends Activity {
     TextView currentWordText;
     ArrayList<String> letters;
     TextView timerText;
+    AlertDialog.Builder usernameBuilder;
 
 
     private void init() {
@@ -47,6 +52,34 @@ public class SinglePlayerActivity extends Activity {
         mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
+
+        //Set up username dialog
+        usernameBuilder = new AlertDialog.Builder(this);
+        usernameBuilder.setTitle("You reaced a new hiscore! Please enter username!");
+
+        final EditText input = new EditText(this);
+       // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        usernameBuilder.setView(input);
+
+       // Set up the buttons
+        usernameBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            //addnewscore if reached a new high score
+            public void onClick(DialogInterface dialog, int which) {
+                Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
+                PlayerInfoHelper.currentPlayerName = input.getText().toString();
+                PlayerInfoHelper.addNewScore(currentScore);
+
+
+            }
+        });
+        usernameBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
 
         // Populate the score mapping
@@ -81,7 +114,13 @@ public class SinglePlayerActivity extends Activity {
             }
 
             public void onFinish() {
-               timerText.setText("done!");
+                timerText.setText("done!");
+                Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
+                if(PlayerInfoHelper.isNewScore(currentScore)) {
+                    usernameBuilder.show();
+                }
+
+
             }
         }.start();
 
