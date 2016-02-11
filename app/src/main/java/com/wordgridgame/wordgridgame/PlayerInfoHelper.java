@@ -41,7 +41,7 @@ public class PlayerInfoHelper {
             sortByValue(list);
             return list;
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("!!!!!!!!!!" + e.getMessage());
             return null;
         }
     }

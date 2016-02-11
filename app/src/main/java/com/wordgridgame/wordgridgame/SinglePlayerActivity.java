@@ -62,7 +62,7 @@ public class SinglePlayerActivity extends Activity {
 
         //Set up username dialog
         usernameBuilder = new AlertDialog.Builder(this);
-        usernameBuilder.setTitle("You reaced a new hiscore! Please enter username!");
+        usernameBuilder.setTitle("You reached a new high score! Please enter username!");
 
         final EditText input = new EditText(this);
        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
@@ -75,7 +75,11 @@ public class SinglePlayerActivity extends Activity {
             //addnewscore if reached a new high score
             public void onClick(DialogInterface dialog, int which) {
                 Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
-                PlayerInfoHelper.currentPlayerName = input.getText().toString();
+                if(input.getText() == null){
+                    PlayerInfoHelper.currentPlayerName = "Anonymous";
+                } else {
+                    PlayerInfoHelper.currentPlayerName = input.getText().toString();
+                }
                 PlayerInfoHelper.addNewScore(currentScore);
 
 
@@ -128,13 +132,11 @@ public class SinglePlayerActivity extends Activity {
             }
 
             public void onFinish() {
-                timerText.setText("Time's Up!");
+                timerText.setText("Done");
                 Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
                 if(PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
-
-
             }
         }.start();
 
@@ -300,5 +302,12 @@ public class SinglePlayerActivity extends Activity {
             return true;
         }
         return false;
+    }
+
+    private void onDoneButtonClick(){
+        Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
+        if(PlayerInfoHelper.isNewScore(currentScore)) {
+            usernameBuilder.show();
+        }
     }
 }

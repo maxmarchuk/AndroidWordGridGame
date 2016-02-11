@@ -128,6 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:onClick="onDoneButtonClick"
                     />
             </TableRow>
         </TableLayout>
@@ -178,6 +179,7 @@
 
         <TextView
             android:layout_alignLeft="@id/gridLayout"
+            android:background="@color/primary"
             android:id="@+id/txtCurrentWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
