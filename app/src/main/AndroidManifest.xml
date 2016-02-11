@@ -24,8 +24,13 @@
         <activity
             android:name=".HighScoresActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".PlayMainMenuActivity"
+        <activity
+            android:name=".PlayMainMenuActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".HelpMenuActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
