@@ -8,11 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 
 public class SinglePlayerActivity extends Activity {
@@ -30,6 +33,7 @@ public class SinglePlayerActivity extends Activity {
     TextView currentWordText;
     ArrayList<String> letters;
     TextView timerText;
+    ArrayList<Integer> buttonsClicked;
 
 
     private void init() {
@@ -44,10 +48,10 @@ public class SinglePlayerActivity extends Activity {
         submitButton = (Button) findViewById(R.id.btnSubmit);
         clearButton = (Button) findViewById(R.id.btnClear);
 
-        mArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mNameList);
+        mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
-
+        buttonsClicked = new ArrayList<>();
 
         // Populate the score mapping
         // *Key*: Word Length
@@ -91,11 +95,20 @@ public class SinglePlayerActivity extends Activity {
         for (int i = 0; i < letterGrid.getChildCount(); i++) {
             final Button btn = (Button) letterGrid.getChildAt(i);
             btn.setText(letters.get(i));
+            btn.setTag(i);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.setBackgroundResource(R.drawable.yellowbutton9patch);
-                    currentWordText.append(btn.getText());
+                    Integer buttonIndex = (Integer)v.getTag();
+
+                    //if the button hasn't been clicked yet
+                    if(!buttonsClicked.contains(buttonIndex)) {
+                        if(isValidPick(buttonIndex)){
+                            v.setBackgroundResource(R.drawable.yellowbutton9patch);
+                            currentWordText.append(btn.getText());
+                            buttonsClicked.add(buttonIndex);
+                        }
+                    }
                 }
             });
         }
@@ -135,6 +148,12 @@ public class SinglePlayerActivity extends Activity {
     private boolean valid(String word) {
         int length = word.length();
 
+        // make sure the word isn't inserted yet
+        if(mNameList.contains(word)){
+            Toast.makeText(getApplicationContext(), "Word already added", Toast.LENGTH_SHORT).show();
+            resetGrid();
+            return false;
+        }
         // Check word lengths
         if (length == 0) {
             Toast.makeText(getApplicationContext(), "Please input a character sequence", Toast.LENGTH_SHORT).show();
@@ -186,6 +205,7 @@ public class SinglePlayerActivity extends Activity {
     private void resetGrid() {
         currentWordText.setText("");
         resetGridCellColors();
+        buttonsClicked.clear();
     }
 
 
@@ -203,5 +223,33 @@ public class SinglePlayerActivity extends Activity {
 
     private boolean isInDictionary(String word) {
         return board.words.contains(word);
+    }
+
+    private boolean isValidPick(int index){
+        ArrayList<Integer> validIndices;
+        if(buttonsClicked.isEmpty()){
+            return true;
+        }
+        switch(index%4){
+            case 0:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index-4, index-3, index+1, index+4, index+5));
+                break;
+            case 1:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-3, index-1, index+1, index+3, index+4, index+5));
+                break;
+            case 2:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-3, index-1, index+1, index+3, index+4, index+5));
+                break;
+            case 3:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-1, index+3, index+4));
+                break;
+            default:
+                validIndices = new ArrayList<>();
+                System.out.println("SHOULD NOT BE HERE");
+        }
+        if(validIndices.contains(buttonsClicked.get(buttonsClicked.size()-1))){
+            return true;
+        }
+        return false;
     }
 }
