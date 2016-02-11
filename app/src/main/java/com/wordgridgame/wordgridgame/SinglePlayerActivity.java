@@ -75,8 +75,8 @@ public class SinglePlayerActivity extends Activity {
             //addnewscore if reached a new high score
             public void onClick(DialogInterface dialog, int which) {
                 Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
-                if(input.getText() == null){
-                    PlayerInfoHelper.currentPlayerName = "Anonymous";
+                if(input.getText().length() == 0){
+                    PlayerInfoHelper.currentPlayerName = "Unknown";
                 } else {
                     PlayerInfoHelper.currentPlayerName = input.getText().toString();
                 }
@@ -304,7 +304,7 @@ public class SinglePlayerActivity extends Activity {
         return false;
     }
 
-    private void onDoneButtonClick(){
+    public void onDoneButtonClick(View v){
         Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
         if(PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();

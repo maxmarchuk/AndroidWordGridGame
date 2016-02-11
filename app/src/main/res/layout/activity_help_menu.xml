@@ -10,60 +10,49 @@
     android:background="@color/primary_dark"
     tools:context="com.wordgridgame.wordgridgame.HelpMenuActivity">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/txtBoggle"
-        android:text="How to Play"
-        android:textSize="50dp"
-        android:textColor="@color/accent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textAlignment="center"
-
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-    </TableRow>
-<TableRow
-    android:id="@+id/tableRow2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/txtInstruc"
-        android:text= "@string/str"
-        android:textSize="12sp"
-        android:textColor="@color/accent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</TableRow>
-    </TableLayout>
     <Button
         style="?android:attr/buttonStyleSmall"
 
-        android:text="Done"
+        android:text="Back"
         android:id="@+id/button"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:background="@drawable/yellowbutton9patch"
         android:textColor="@color/primary_text"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:clickable="true"
         android:onClick="goToMainMenuActivity"/>
+
+    <TextView
+        android:id="@+id/txtBoggle"
+        android:text="How to Play"
+        android:textSize="50dp"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:textColor="@color/accent"
+        android:layout_below="@id/button"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:background="@color/primary"
+        android:width="200dp"
+        android:height="300dp"
+        android:layout_below="@+id/txtBoggle"
+        android:id="@+id/txtInstruc"
+        android:text= "@string/str"
+        android:textSize="12sp"
+        android:textColor="@color/accent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 
 </RelativeLayout>
