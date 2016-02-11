@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 
 public class SinglePlayerActivity extends Activity {
@@ -30,6 +31,7 @@ public class SinglePlayerActivity extends Activity {
     TextView currentWordText;
     ArrayList<String> letters;
     TextView timerText;
+    long timeBlinkInMilliSeconds = 60*1000;
 
 
     private void init() {
@@ -74,14 +76,21 @@ public class SinglePlayerActivity extends Activity {
 
         adaptBoardToCharList();
 
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(5*60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                timerText.setText("seconds remaining: " + millisUntilFinished / 1000);
+                long ms = millisUntilFinished;
+                if(ms<timeBlinkInMilliSeconds){
+                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
+                }
+                String text = String.format("%02d : %02d",
+                        TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
+                        TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
+                timerText.setText(text);
             }
 
             public void onFinish() {
-               timerText.setText("done!");
+               timerText.setText("Time's Up!");
             }
         }.start();
 

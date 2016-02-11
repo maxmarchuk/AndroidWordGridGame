@@ -23,4 +23,9 @@ public class MainMenuActivity extends Activity {
         Intent intent=new Intent(getApplicationContext(),HighScoresActivity.class);
         startActivity(intent);
     }
+
+    public void goToHelpMenuActivity(View view){
+        Intent intent=new Intent(getApplicationContext(),HelpMenuActivity.class);
+        startActivity(intent);
+    }
 }
