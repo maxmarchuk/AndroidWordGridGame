@@ -1,5 +1,7 @@
 package com.wordgridgame.wordgridgame;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,12 @@ public class HillClimber {
     Board board;
     int wordsCount;
     char[][] grid;
+    Context context;
+
+
+    public HillClimber(Context context){
+        this.context = context;
+    }
     void randomGrid(){
         char[][] temp=new char[4][4];
         for(int i=0;i<4;i++){
@@ -46,7 +54,7 @@ public class HillClimber {
     public  Board climb()
     {
         randomGrid();
-        board=new Board(grid,"/Users/mmarchuk/code/school/havlicek-cs454t4/ospd.txt");
+        board=new Board(grid, this.context);
         //begin climb
         ArrayList<String> list =new ArrayList<String>();
         while(wordsCount<5) {

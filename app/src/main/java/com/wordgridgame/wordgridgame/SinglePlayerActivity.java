@@ -12,14 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 
@@ -46,7 +44,7 @@ public class SinglePlayerActivity extends Activity {
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         mNameList = new ArrayList();
-        hc = new HillClimber();
+        hc = new HillClimber(getApplicationContext());
         letters = new ArrayList<>();
 
         // Grab activity elements

@@ -1,10 +1,11 @@
 package com.wordgridgame.wordgridgame;
 
-import android.os.Environment;
+import android.content.Context;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.io.File;
-import java.util.Scanner;
 
 /**
  * Created by lyf on 2016/1/25.
@@ -77,22 +78,27 @@ public class Board {
         }
     }
 
-    public Board(char[][] grid,String wordListPath)
+    public Board(char[][] grid, Context context)
     {
         board=new Letter[4][4];
         fromArray(grid);
         try {
-            String temp;
-            File sdcard = Environment.getExternalStorageDirectory();
+            // Open the file
+            InputStream fstream = context.getResources().openRawResource(
+                    context.getResources().getIdentifier("ospd", "raw", context.getPackageName()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
-            Scanner file = new Scanner(new File(sdcard, "ospd.txt"));
-            while (file.hasNextLine()) {
-                temp = file.nextLine().toUpperCase();
-                this.dict.add(temp);
+            String strLine;
+
+            //Read File Line By Line
+            while ((strLine = br.readLine()) != null) {
+                // Print the content on the console
+                this.dict.add(strLine.toUpperCase());
             }
-        }catch (Exception e){
-            System.out.println("File not found " + e.getMessage());
-            System.out.println("test");
+            br.close();
+
+        } catch(Exception e) {
+            System.out.println("Error reading file. Error Message: " + e.getMessage());
         }
     }
 
@@ -124,8 +130,8 @@ public class Board {
 
             }
         }
-        return words;
 
+        return words;
     }
 
 }
