@@ -163,7 +163,6 @@
 
         </GridLayout>
 
-
         <ListView
             android:id="@+id/listSubmittedWords"
             android:layout_width="match_parent"

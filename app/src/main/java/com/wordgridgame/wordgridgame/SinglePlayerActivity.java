@@ -3,6 +3,7 @@ package com.wordgridgame.wordgridgame;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.InputType;
@@ -39,13 +40,10 @@ public class SinglePlayerActivity extends Activity {
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
     long timeBlinkInMilliSeconds = 60*1000;
-
+    protected static Activity singplePlayerActivity;
 
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
-        mNameList = new ArrayList();
-        hc = new HillClimber(getApplicationContext());
-        letters = new ArrayList<>();
 
         // Grab activity elements
         playerScoreTextView = (TextView) findViewById(R.id.txtPlayerScore);
@@ -53,6 +51,8 @@ public class SinglePlayerActivity extends Activity {
         submitButton = (Button) findViewById(R.id.btnSubmit);
         clearButton = (Button) findViewById(R.id.btnClear);
 
+        letters = new ArrayList<>();
+        mNameList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
@@ -107,14 +107,12 @@ public class SinglePlayerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_player);
+        singplePlayerActivity = this;
 
         //initialize everything
         init();
-
-        //Populate the board
-        board = hc.climb();
-
-        adaptBoardToCharList();
+        new BackgroundGridTask().execute();
+//        adaptBoardToCharList();
 
         new CountDownTimer(5*60000, 1000) {
 
@@ -137,31 +135,6 @@ public class SinglePlayerActivity extends Activity {
                 }
             }
         }.start();
-
-        //Set the gridview's data to new list of letters
-        letterGrid = (GridLayout) findViewById(R.id.gridLayout);
-
-        for (int i = 0; i < letterGrid.getChildCount(); i++) {
-            final Button btn = (Button) letterGrid.getChildAt(i);
-            btn.setText(letters.get(i));
-            btn.setTag(i);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Integer buttonIndex = (Integer)v.getTag();
-
-                    //if the button hasn't been clicked yet
-                    if(!buttonsClicked.contains(buttonIndex)) {
-                        if(isValidPick(buttonIndex)){
-                            v.setBackgroundResource(R.drawable.yellowbutton9patch);
-                            currentWordText.append(btn.getText());
-                            buttonsClicked.add(buttonIndex);
-                        }
-                    }
-                }
-            });
-        }
-
 
         // Submit Button Click Listener
         // On clicking submit, get the word length and add its respective score to the total score
@@ -190,7 +163,6 @@ public class SinglePlayerActivity extends Activity {
                     }
                 }
         );
-
     }
 
     // returns false if the word isn't long enough or isn't in the dictionary of valid words
@@ -306,6 +278,45 @@ public class SinglePlayerActivity extends Activity {
         Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
         if(PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();
+        }
+    }
+
+    public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            hc = new HillClimber(getApplicationContext());
+            board = hc.climb();
+            adaptBoardToCharList();
+
+            singplePlayerActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //Set the gridview's data to new list of letters
+                    letterGrid = (GridLayout) findViewById(R.id.gridLayout);
+
+                    for (int i = 0; i < 16; i++) {
+                        final Button btn = (Button) letterGrid.getChildAt(i);
+                        btn.setText(letters.get(i));
+                        btn.setTag(i);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Integer buttonIndex = (Integer)v.getTag();
+
+                                //if the button hasn't been clicked yet
+                                if(!buttonsClicked.contains(buttonIndex)) {
+                                    if(isValidPick(buttonIndex)){
+                                        v.setBackgroundResource(R.drawable.yellowbutton9patch);
+                                        currentWordText.append(btn.getText());
+                                        buttonsClicked.add(buttonIndex);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            return null;
         }
     }
 }

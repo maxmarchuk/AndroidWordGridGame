@@ -1,11 +1,14 @@
 package com.wordgridgame.wordgridgame;
 
 import android.content.Context;
+import android.provider.Settings;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import static java.lang.System.out;
 
 /**
  * Created by lyf on 2016/1/25.
@@ -76,6 +79,7 @@ public class Board {
                 board[X+1][Y+1].traverse(soFar);
             hasBeenHit=false;
         }
+
     }
 
     public Board(char[][] grid, Context context)
@@ -127,9 +131,9 @@ public class Board {
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
                 board[i][j].traverse("");
-
             }
         }
+        System.out.println("!!!! DONE GETTING WORDS. VALID COUNT: "+ words.size());
 
         return words;
     }

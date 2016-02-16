@@ -51,17 +51,17 @@ public class HillClimber {
 
     }
 
-    public  Board climb()
+    public Board climb()
     {
         randomGrid();
         board=new Board(grid, this.context);
         //begin climb
         ArrayList<String> list =new ArrayList<String>();
-        while(wordsCount<5) {
-            mutate();
-            list=board.getWords();
-        }
+//        while(wordsCount<5) {
+//            mutate();
         list=board.getWords();
+//        }
+//        list=board.getWords();
         for(int i=0;i<list.size();i++){
             System.out.println(list.get(i));
         }
