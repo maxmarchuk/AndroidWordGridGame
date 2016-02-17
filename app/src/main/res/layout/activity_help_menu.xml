@@ -7,18 +7,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/primary_dark"
+    android:background="@drawable/background"
     tools:context="com.wordgridgame.wordgridgame.HelpMenuActivity">
 
     <Button
         style="?android:attr/buttonStyleSmall"
 
         android:text="Back"
-        android:id="@+id/button"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="@drawable/yellowbutton9patch"
+        android:background="@drawable/shape"
         android:textColor="@color/primary_text"
+        android:id="@+id/button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:onClick="goToMainMenuActivity"/>
@@ -38,21 +38,29 @@
         android:layout_height="wrap_content"
         />
 
+<ScrollView
+    android:layout_below="@+id/txtBoggle"
+    android:id="@+id/scrollview"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="vertical">
+
     <TextView
-        android:background="@color/primary"
         android:width="200dp"
         android:height="300dp"
-        android:layout_below="@+id/txtBoggle"
         android:id="@+id/txtInstruc"
         android:text= "@string/str"
-        android:textSize="12sp"
+        android:textSize="18sp"
         android:textColor="@color/accent"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="10dp"
+        android:typeface="serif"
         android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         />
 
-
+</ScrollView>
 </RelativeLayout>
+

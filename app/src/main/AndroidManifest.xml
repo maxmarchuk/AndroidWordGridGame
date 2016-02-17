@@ -29,7 +29,7 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".HelpMenuActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@style/AppTheme2"/>
 
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

@@ -7,17 +7,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/primary_dark"
+    android:background="@drawable/background"
     tools:context="com.wordgridgame.wordgridgame.PlayMainMenuActivity">
 
 
     <TextView
         android:id="@+id/txtBoggle"
-        android:text="Boggle"
-        android:textSize="100dp"
         android:textColor="@color/accent"
         android:textAppearance="?android:attr/textAppearanceLarge"
-
+        android:drawableStart="@drawable/logo"
         android:layout_alignParentTop="true"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
@@ -27,55 +25,45 @@
 
     <Button
         android:id="@+id/btnOnePlayer"
-        android:background="@drawable/yellowbutton9patch"
+        android:background="@drawable/shape"
         android:textColor="@color/primary_text"
-
         android:text="1 Player"
         android:textStyle="bold"
-
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_above="@+id/btnTwoPlayers"
-        android:layout_centerHorizontal="true"
-
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:clickable="true"
         android:onClick="goToSinglePlayer"
-        />
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:layout_alignStart="@+id/btnTwoPlayers" />
+
 
     <Button
         android:id="@+id/btnTwoPlayers"
-        android:background="@drawable/yellowbutton9patch"
+        android:background="@drawable/shape"
         android:textColor="@color/primary_text"
-
         android:text="2 Players"
         android:textStyle="bold"
-
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_above="@+id/btnOnlinePlay"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:clickable="true"
-        />
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/btnOnePlayer"
+        android:layout_alignStart="@+id/btnOnlinePlay" />
 
     <Button
         android:id="@+id/btnOnlinePlay"
-        android:background="@drawable/yellowbutton9patch"
+        android:background="@drawable/shape"
         android:textColor="@color/primary_text"
-
-
-        android:text="Online"
+        android:text="Online Play"
         android:textStyle="bold"
-
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
-
+        android:layout_width="200dp"
+        android:layout_height="60dp"
         android:clickable="true"
-        />
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/btnTwoPlayers"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
