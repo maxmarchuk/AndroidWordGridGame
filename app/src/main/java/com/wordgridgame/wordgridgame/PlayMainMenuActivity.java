@@ -17,4 +17,9 @@ public class PlayMainMenuActivity extends Activity {
         Intent intent = new Intent(this, SinglePlayerActivity.class);
         startActivity(intent);
     }
+
+    public void goToTwoPlayer(View view){
+        Intent intent =new Intent(this,TwoPlayerActivity.class);
+        startActivity(intent);
+    }
 }

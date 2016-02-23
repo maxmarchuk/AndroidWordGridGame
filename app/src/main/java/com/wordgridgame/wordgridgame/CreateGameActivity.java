@@ -1,5 +1,6 @@
 package com.wordgridgame.wordgridgame;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -13,7 +14,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.UUID;
 
-public class CreateGameActivity extends AppCompatActivity {
+public class CreateGameActivity extends Activity {
 
     public static int REQUEST_BLUETOOTH = 1;
     BluetoothAdapter BTAdapter;
@@ -29,7 +30,8 @@ public class CreateGameActivity extends AppCompatActivity {
             startActivityForResult(enableBT, REQUEST_BLUETOOTH);
 
         }
-        new AcceptThread().run();
+        //start listening
+        new AcceptThread().start();
 
 
     }
@@ -45,7 +47,7 @@ public class CreateGameActivity extends AppCompatActivity {
             try {
                 // MY_UUID is the app's UUID string, also used by the client code
                 tmp = BTAdapter.listenUsingRfcommWithServiceRecord("cs554team4",UUID.fromString("28901242-e667-40eb-bf4d-af5b6555e712"));
-            } catch (IOException e) { }
+            } catch (IOException e) { System.out.println("listening error:"+e.toString());}
             mmServerSocket = tmp;
         }
 
@@ -54,21 +56,21 @@ public class CreateGameActivity extends AppCompatActivity {
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
+                    txtViewMsg.setText("Waiting for other players");
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
                     break;
                 }
                 // If a connection was accepted
                 if (socket != null) {
-                    //TODO work to manage the connection (in a separate thread) and start game
-                    txtViewMsg.setText("Waiting for other players");
 
+                    txtViewMsg.setText("other player connected!");
+                    //TODO work to manage the connection (in a separate thread) and start game
                     try {
                         mmServerSocket.close();
                     }catch (IOException e) {
                         break;
                     }
-                    break;
                 }else{
                     txtViewMsg.setText("error socekt==null");
                 }

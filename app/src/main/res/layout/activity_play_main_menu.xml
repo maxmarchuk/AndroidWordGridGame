@@ -50,7 +50,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="20dp"
         android:layout_below="@id/btnOnePlayer"
-        android:layout_alignStart="@+id/btnOnlinePlay" />
+        android:layout_alignStart="@+id/btnOnlinePlay"
+        android:onClick="goToTwoPlayer" />
 
     <Button
         android:id="@+id/btnOnlinePlay"
