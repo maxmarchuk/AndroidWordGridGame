@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NavUtils;
 import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -25,10 +26,11 @@ import java.util.concurrent.TimeUnit;
 public class SinglePlayerActivity extends Activity {
 
     GridLayout letterGrid;
-    Button submitButton;
+    Button btnBackToMenu;
+    Button btnDone;
     Button clearButton;
     ListView mainListView;
-    TextView playerScoreTextView;
+    Button playerScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
     HashMap<Integer, Integer> scoreMap;
@@ -36,26 +38,27 @@ public class SinglePlayerActivity extends Activity {
     Board board = null;
     TextView currentWordText;
     ArrayList<String> letters;
-    TextView timerText;
+    Button timerText;
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
-    long timeBlinkInMilliSeconds = 60*1000;
+    long timeBlinkInMilliSeconds = 60 * 1000;
     protected static Activity singplePlayerActivity;
 
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
 
         // Grab activity elements
-        playerScoreTextView = (TextView) findViewById(R.id.txtPlayerScore);
+        playerScoreTextView = (Button) findViewById(R.id.txtPlayerScore);
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
-        submitButton = (Button) findViewById(R.id.btnSubmit);
+        btnBackToMenu = (Button) findViewById(R.id.btnBack);
+        btnDone = (Button) findViewById(R.id.btnDone);
         clearButton = (Button) findViewById(R.id.btnClear);
 
         letters = new ArrayList<>();
         mNameList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        timerText = (TextView) findViewById(R.id.txtTimer);
+        timerText = (Button) findViewById(R.id.txtTimer);
         buttonsClicked = new ArrayList<>();
 
         //Set up username dialog
@@ -63,17 +66,17 @@ public class SinglePlayerActivity extends Activity {
         usernameBuilder.setTitle("You reached a new high score! Please enter username!");
 
         final EditText input = new EditText(this);
-       // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         usernameBuilder.setView(input);
 
-       // Set up the buttons
+        // Set up the buttons
         usernameBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             //addnewscore if reached a new high score
             public void onClick(DialogInterface dialog, int which) {
-                Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
-                if(input.getText().length() == 0){
+                Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+                if (input.getText().length() == 0) {
                     PlayerInfoHelper.currentPlayerName = "Unknown";
                 } else {
                     PlayerInfoHelper.currentPlayerName = input.getText().toString();
@@ -101,6 +104,8 @@ public class SinglePlayerActivity extends Activity {
         scoreMap.put(6, 3);
         scoreMap.put(7, 5);
         scoreMap.put(8, 11);
+
+        initFonts();
     }
 
     @Override
@@ -114,11 +119,11 @@ public class SinglePlayerActivity extends Activity {
         new BackgroundGridTask().execute();
 //        adaptBoardToCharList();
 
-        new CountDownTimer(5*60000, 1000) {
+        new CountDownTimer(5 * 60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
-                if(ms<timeBlinkInMilliSeconds){
+                if (ms < timeBlinkInMilliSeconds) {
                     timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
                 }
                 String text = String.format("%02d : %02d",
@@ -129,30 +134,31 @@ public class SinglePlayerActivity extends Activity {
 
             public void onFinish() {
                 timerText.setText("Done");
-                Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
-                if(PlayerInfoHelper.isNewScore(currentScore)) {
+                Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+                if (PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
+                finish();
             }
         }.start();
 
         // Submit Button Click Listener
         // On clicking submit, get the word length and add its respective score to the total score
         //Also add the word to the list of submitted words.
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String submittedWord = currentWordText.getText().toString();
-                boolean validWord = valid(submittedWord);
-
-                // If the words was valid, we know it's already added to the
-                // word list so we can clear the current word text
-                if (validWord) {
-                    addWord(submittedWord);
-                    resetGrid();
-                }
-            }
-        });
+//        submitButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String submittedWord = currentWordText.getText().toString();
+//                boolean validWord = valid(submittedWord);
+//
+//                // If the words was valid, we know it's already added to the
+//                // word list so we can clear the current word text
+//                if (validWord) {
+//                    addWord(submittedWord);
+//                    resetGrid();
+//                }
+//            }
+//        });
 
         // On clicking clear button, empty the current word
         clearButton.setOnClickListener(
@@ -170,7 +176,7 @@ public class SinglePlayerActivity extends Activity {
         int length = word.length();
 
         // make sure the word isn't inserted yet
-        if(mNameList.contains(word)){
+        if (mNameList.contains(word)) {
             Toast.makeText(getApplicationContext(), "Word already added", Toast.LENGTH_SHORT).show();
             resetGrid();
             return false;
@@ -184,7 +190,7 @@ public class SinglePlayerActivity extends Activity {
             return false;
         }
 
-        if(!isInDictionary(word)){
+        if (!isInDictionary(word)) {
             Toast.makeText(getApplicationContext(), "Invalid Word", Toast.LENGTH_SHORT).show();
             resetGrid();
             return false;
@@ -219,7 +225,7 @@ public class SinglePlayerActivity extends Activity {
     private void resetGridCellColors() {
         for (int i = 0; i < letterGrid.getChildCount(); i++) {
             Button btn = (Button) letterGrid.getChildAt(i);
-            btn.setBackgroundResource(R.drawable.bluebutton9patch);
+            btn.setBackgroundResource(R.drawable.blueshape);
         }
     }
 
@@ -246,39 +252,43 @@ public class SinglePlayerActivity extends Activity {
         return board.words.contains(word);
     }
 
-    private boolean isValidPick(int index){
+    private boolean isValidPick(int index) {
         ArrayList<Integer> validIndices;
-        if(buttonsClicked.isEmpty()){
+        if (buttonsClicked.isEmpty()) {
             return true;
         }
-        switch(index%4){
+        if (buttonsClicked.contains(index)) {
+            return false;
+        }
+        switch (index % 4) {
             case 0:
-                validIndices = new ArrayList<Integer>(Arrays.asList(index-4, index-3, index+1, index+4, index+5));
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 4, index - 3, index + 1, index + 4, index + 5));
                 break;
             case 1:
-                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-3, index-1, index+1, index+3, index+4, index+5));
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 3, index - 1, index + 1, index + 3, index + 4, index + 5));
                 break;
             case 2:
-                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-3, index-1, index+1, index+3, index+4, index+5));
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 3, index - 1, index + 1, index + 3, index + 4, index + 5));
                 break;
             case 3:
-                validIndices = new ArrayList<Integer>(Arrays.asList(index-5, index-4, index-1, index+3, index+4));
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 1, index + 3, index + 4));
                 break;
             default:
                 validIndices = new ArrayList<>();
                 System.out.println("SHOULD NOT BE HERE");
         }
-        if(validIndices.contains(buttonsClicked.get(buttonsClicked.size()-1))){
+        if (validIndices.contains(buttonsClicked.get(buttonsClicked.size() - 1))) {
             return true;
         }
         return false;
     }
 
-    public void onDoneButtonClick(View v){
-        Integer currentScore= Integer.parseInt(playerScoreTextView.getText().toString());
-        if(PlayerInfoHelper.isNewScore(currentScore)) {
+    public void onDoneButtonClick(View v) {
+        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        if (PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();
         }
+        finish();
     }
 
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
@@ -301,15 +311,25 @@ public class SinglePlayerActivity extends Activity {
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Integer buttonIndex = (Integer)v.getTag();
+                                Integer buttonIndex = (Integer) v.getTag();
 
-                                //if the button hasn't been clicked yet
-                                if(!buttonsClicked.contains(buttonIndex)) {
-                                    if(isValidPick(buttonIndex)){
-                                        v.setBackgroundResource(R.drawable.yellowbutton9patch);
-                                        currentWordText.append(btn.getText());
-                                        buttonsClicked.add(buttonIndex);
+                                // If the button is clicked again, attempt to submit the word.
+                                if ((buttonsClicked.size() > 0) && (buttonsClicked.get(buttonsClicked.size() - 1) == buttonIndex)) {
+                                    String submittedWord = currentWordText.getText().toString();
+                                    boolean validWord = valid(submittedWord);
+
+                                    if (validWord) {
+                                        addWord(submittedWord);
+                                        resetGrid();
                                     }
+                                    return;
+                                }
+
+                                // If the button is a valid button click (direct neighbor of last button clicked)
+                                if (isValidPick(buttonIndex)) {
+                                    v.setBackgroundResource(R.drawable.shape);
+                                    currentWordText.append(btn.getText());
+                                    buttonsClicked.add(buttonIndex);
                                 }
                             }
                         });
@@ -318,5 +338,16 @@ public class SinglePlayerActivity extends Activity {
             });
             return null;
         }
+    }
+
+    private void initFonts() {
+        FontManager fm = new FontManager();
+        btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+        clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+        btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+    }
+
+    public void goToPreviousActivity(View v){
+        finish();
     }
 }

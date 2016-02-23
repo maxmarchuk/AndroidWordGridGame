@@ -10,9 +10,9 @@
     <string name="title_activity_play_menu">playMenuActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="str"><b>Select a mode</b>\n\t&#8226;Single player\n\t\t&#8226;Find as many words as you can!\n\t\t&#8226;3,4,5,6,and 7 letter words.\n\t&#8226;Two-Player Mode\n\t\t&#8226;Basic Mode\n\t\t\t&#8226;You will get the same copy of the other player, try beating them!\n\t\t&#8226;Cutthroat Mode\n\t\t\t&#8226;Two players work on the same board at the same time.\n\t&#8226;Online Mode\n\n<b>Scoring</b>\n&#8226;3-letter +1pt, 4-letter +2pts, 5-letter +3pts. 6-letter +4pts, 7-letter +5pts\n\n<b>High Scores and Winning!</b>\n&#8226;Beat your own score or someone else’s and make it onto the high score board!\n
+    <string name="str"><b>Select a mode</b>\n\t&#8226;Single player\n\t\t&#8226;Find as many words as you can!\n\t\t&#8226;3,4,5,6,and 7 letter words.\n\t&#8226;Two-Player Mode\n\t\t&#8226;Basic Mode\n\t\t\t&#8226;You will get the same copy of the other player, try beating them!\n\t\t&#8226;Cutthroat Mode\n\t\t\t&#8226;Two players work on the same board at the same time.\n\t&#8226;Online Mode\n\n<b>Scoring</b>\n&#8226;3-letter +1pt, 4-letter +2pts, 5-letter +3pts. 6-letter +4pts, 7-letter +5pts\n\n<b>High Scores and Winning!</b>\n&#8226;Beat your own score or someone else’s and make it onto the high score board!\</string>
 
-</string>
-
+    <!-- Icons -->
+    <string name="fa_icon_backarrow">&#xf060;</string>
 
 </resources>
