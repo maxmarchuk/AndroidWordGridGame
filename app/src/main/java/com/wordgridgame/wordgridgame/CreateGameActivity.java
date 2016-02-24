@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -56,7 +57,14 @@ public class CreateGameActivity extends Activity {
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
-                    txtViewMsg.setText("Waiting for other players");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtViewMsg.setText("Game created.!");
+
+                        }
+                    });
+
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
                     break;
@@ -64,7 +72,17 @@ public class CreateGameActivity extends Activity {
                 // If a connection was accepted
                 if (socket != null) {
 
-                    txtViewMsg.setText("other player connected!");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("other connected!");
+                            Toast.makeText(getApplicationContext(), "other player has connected!",
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
                     //TODO work to manage the connection (in a separate thread) and start game
                     try {
                         mmServerSocket.close();

@@ -36,6 +36,7 @@ public class JoinGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_join_game);
         listDevices= (ListView)findViewById(R.id.listViewDevices);
         btnJoinGame=(Button)findViewById(R.id.btnJoin);
@@ -44,15 +45,18 @@ public class JoinGameActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String deviceName=selectedItem;
-
-                for(BluetoothDevice d: setDevice){
-                    if(d.getName()==deviceName)
-                    {
-                        ConnectThread t=new ConnectThread(d);
-                        t.start();
-                        break;
-                    }
+                String deviceAddress=null;
+                for(BluetoothDevice d : setDevice){
+                    if(d.getName().equals(deviceName))
+                        deviceAddress=d.getAddress();
                 }
+
+
+                    BluetoothDevice remoteDevice=BTAdapter.getRemoteDevice(deviceAddress);
+
+                        ConnectThread t=new ConnectThread(remoteDevice);
+                        t.start();
+
 
 
             }
@@ -94,19 +98,21 @@ public class JoinGameActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
 
 
+               System.out.println("on receive");
                 String action = intent.getAction();
                 // When discovery finds a device
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     // Get the BluetoothDevice object from the Intent
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if(device==null)
-                        System.out.println("device null");
+                    if(device!=null)
                     // Add the name and address to an array adapter to show in a ListView
                     try {
+
                     setDevice.add(device);
                     deviceList.add(device.getName());
                     mArrayAdapter.notifyDataSetChanged();
-                    }catch (Exception ee){}
+
+                    }catch (Exception ee){System.out.println(ee.toString());}
                 }
 
         }
@@ -139,7 +145,6 @@ public class JoinGameActivity extends Activity {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
                 mmSocket.connect();
-                setTitle("connected!");
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and get out
                 try {
