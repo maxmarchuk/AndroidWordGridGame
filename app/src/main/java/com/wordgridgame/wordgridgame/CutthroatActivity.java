@@ -87,7 +87,7 @@ public class CutthroatActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basic_two_player);
+        setContentView(R.layout.activity_cutthroat);
         basicTwoPlayerActivity = this;
 
         //initialize everything

@@ -30,10 +30,10 @@
             android:name=".JoinGameActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".CreateGameActivity"
+            android:name=".BluetoothHostGameActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".TwoPlayerActivity"
+            android:name=".BluetoothMenuActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".CutthroatActivity"

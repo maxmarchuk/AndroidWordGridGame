@@ -5,17 +5,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.UUID;
 
-public class CreateGameActivity extends Activity {
+public class BluetoothHostGameActivity extends Activity {
 
     public static int REQUEST_BLUETOOTH = 1;
     BluetoothAdapter BTAdapter;
@@ -23,7 +20,7 @@ public class CreateGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_game);
+        setContentView(R.layout.activity_bluetooth_host_game);
         txtViewMsg=(TextView)findViewById(R.id.txtMsg);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!BTAdapter.isEnabled()) {
@@ -90,7 +87,7 @@ public class CreateGameActivity extends Activity {
                         break;
                     }
                 }else{
-                    txtViewMsg.setText("error socekt==null");
+                    txtViewMsg.setText("error socket is null");
                 }
 
             }

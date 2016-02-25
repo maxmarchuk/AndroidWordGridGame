@@ -1,28 +1,27 @@
 package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class TwoPlayerActivity extends Activity {
+public class BluetoothMenuActivity extends Activity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_two_player);
+        setContentView(R.layout.activity_bluetooth_menu);
 
 
     }
 
     public void JoinGame(View view){
-        Intent intent =new Intent(this,JoinGameActivity.class);
+        Intent intent =new Intent(this, JoinGameActivity.class);
         startActivity(intent);
     }
     public void CreateGame(View view){
-        Intent intent =new Intent(this,CreateGameActivity.class);
+        Intent intent =new Intent(this,BluetoothHostGameActivity.class);
         startActivity(intent);
     }
 }

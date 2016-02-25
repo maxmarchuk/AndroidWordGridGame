@@ -22,8 +22,8 @@ public class PlayMainMenuActivity extends Activity {
         Intent intent =new Intent(this,TwoPlayerMenuActivity.class);
         startActivity(intent);
     }
-    public void goToOnline(View view){
-        Intent intent =new Intent(this,TwoPlayerActivity.class);
+    public void goToBluetooth(View view){
+        Intent intent =new Intent(this,BluetoothMenuActivity.class);
         startActivity(intent);
     }
 }
