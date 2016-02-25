@@ -2,7 +2,6 @@ package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,8 +13,8 @@ public class TwoPlayerMenuActivity extends Activity {
         setContentView(R.layout.activity_two_player_menu);
     }
 
-    public void goToBasic(View view){
-        Intent intent=new Intent(getApplicationContext(),BasicTwoPlayerActivity.class);
+    public void goToCutthroat(View view){
+        Intent intent=new Intent(getApplicationContext(),CutthroatActivity.class);
         startActivity(intent);
     }
 }

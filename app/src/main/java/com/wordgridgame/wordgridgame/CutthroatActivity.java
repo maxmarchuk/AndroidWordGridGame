@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 
-public class BasicTwoPlayerActivity extends Activity {
+public class CutthroatActivity extends Activity {
 
     GridLayout letterGrid;
     Button btnBackToMenu;
@@ -334,12 +334,12 @@ public class BasicTwoPlayerActivity extends Activity {
         int player2Score = Integer.parseInt(player2ScoreTextView.getText().toString());
 
         if(player1Score == player2Score) {
-            Toast.makeText(BasicTwoPlayerActivity.this, "Tie!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CutthroatActivity.this, "Tie!", Toast.LENGTH_SHORT).show();
         }  else if(player1Score > player2Score) {
-            Toast.makeText(BasicTwoPlayerActivity.this, "Player 1 wins!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CutthroatActivity.this, "Player 1 wins!", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(BasicTwoPlayerActivity.this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CutthroatActivity.this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
         }
         finish();
     }

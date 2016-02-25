@@ -36,7 +36,7 @@
             android:name=".TwoPlayerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".BasicTwoPlayerActivity"
+            android:name=".CutthroatActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".HighScoresActivity"
