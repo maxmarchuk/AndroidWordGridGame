@@ -12,10 +12,4 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
-
-    @Test
-    public void TestBoard() throws Exception{
-        HillClimber hc=new HillClimber();
-        Board board=  hc.climb();
-    }
 }

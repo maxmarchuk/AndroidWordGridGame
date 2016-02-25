@@ -45,8 +45,11 @@
             android:name=".PlayMainMenuActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
+            android:name=".TwoPlayerMenuActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
             android:name=".HelpMenuActivity"
-            android:theme="@style/AppTheme2" />
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 
 </manifest>

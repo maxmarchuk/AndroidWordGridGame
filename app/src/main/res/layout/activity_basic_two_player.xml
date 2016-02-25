@@ -12,6 +12,7 @@
         android:id="@+id/scoreContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
         android:background="#80465f7e"
@@ -20,21 +21,21 @@
         <TableRow>
             <Button android:id="@+id/btnBack"
 
-                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_marginRight="5dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_height="match_parent"
                 android:background="@drawable/greybutton"
                 android:text="&#xf060;"
                 android:textStyle="bold"
                 android:textSize="35dp"
                 android:textColor="#fff"
-                android:onClick="goToPreviousActivity"
-                android:nestedScrollingEnabled="false">
+                android:onClick="goToPreviousActivity">
             </Button>
             <Button
                 android:id="@+id/txtTimer"
-                android:layout_width="100dp"
+                android:layout_width="75dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -43,15 +44,24 @@
                 android:textColor="#fff"
                 android:textSize="20dp"
                 />
-            <TableLayout>
-                <TableRow android:layout_width="50dp"
+            <TableLayout
+                android:padding="0dp"
+                >
+                <TableRow
+                    android:id="@+id/containerPlayer1Score"
+                    android:layout_width="50dp"
                     android:gravity="center"
                     android:background="@drawable/greybutton">
                     <TextView android:text="P1: "
-                        android:width="25dp"/>
+                        android:width="25dp"
+                        android:height="50dp"
+                        android:gravity="center"
+                        android:textColor="#fff"
+                        android:layout_marginLeft="5dp"/>
                     <TextView
                         android:id="@+id/txtPlayer1Score"
-                        android:layout_width="75dp"
+                        android:gravity="center"
+                        android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginRight="5dp"
 
@@ -61,18 +71,31 @@
                         />
                 </TableRow>
             </TableLayout>
-
-            <TextView
-                android:id="@+id/txtPlayer2Score"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="0"
-                android:background="@drawable/greybutton"
-                android:textColor="#fff"
-                android:textSize="20dp"
-                />
+            <TableLayout android:layout_marginLeft="5dp">
+                <TableRow
+                    android:id="@+id/containerPlayer2Score"
+                    android:layout_width="50dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:background="@drawable/greybutton">
+                    <TextView android:text="P2: "
+                        android:height="50dp"
+                        android:gravity="center"
+                        android:width="25dp"
+                        android:textColor="#fff"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/txtPlayer2Score"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="#fff"
+                        android:textSize="20dp"
+                        />
+                </TableRow>
+            </TableLayout>
             <Button
                 android:id="@+id/btnClear"
                 android:background="@drawable/greybutton"
@@ -83,7 +106,6 @@
                 android:layout_marginRight="5dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_weight="1"
                 android:visibility="gone"
                 />
             <Button
@@ -96,7 +118,6 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:onClick="onDoneButtonClick"
-                android:layout_weight="1"
                 android:visibility="gone"
                 />
         </TableRow>
