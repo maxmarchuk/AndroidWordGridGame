@@ -29,6 +29,7 @@ public class CutthroatActivity extends Activity {
 
     TextView player1ScoreTextView;
     TextView player2ScoreTextView;
+
     TableRow player1ScoreContainer;
     TableRow player2ScoreContainer;
 
