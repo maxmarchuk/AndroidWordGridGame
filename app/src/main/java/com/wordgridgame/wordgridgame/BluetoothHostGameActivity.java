@@ -21,7 +21,7 @@ public class BluetoothHostGameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_host_game);
-        txtViewMsg=(TextView)findViewById(R.id.txtMsg);
+        txtViewMsg=(TextView)findViewById(R.id.txtCurrentWord);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!BTAdapter.isEnabled()) {
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -57,7 +57,7 @@ public class BluetoothHostGameActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txtViewMsg.setText("Game created.!");
+                            txtViewMsg.setText("Waiting for player to join");
 
                         }
                     });
