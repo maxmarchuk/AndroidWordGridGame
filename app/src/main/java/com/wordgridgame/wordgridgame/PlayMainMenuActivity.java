@@ -19,6 +19,10 @@ public class PlayMainMenuActivity extends Activity {
     }
 
     public void goToTwoPlayer(View view){
+        Intent intent =new Intent(this,TwoPlayerMenuActivity.class);
+        startActivity(intent);
+    }
+    public void goToOnline(View view){
         Intent intent =new Intent(this,TwoPlayerActivity.class);
         startActivity(intent);
     }
