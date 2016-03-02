@@ -3,10 +3,10 @@ package com.wordgridgame.wordgridgame;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.NavUtils;
 import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -29,6 +30,7 @@ public class SinglePlayerActivity extends Activity {
     Button btnBackToMenu;
     Button btnDone;
     Button clearButton;
+    Button showWords;
     ListView mainListView;
     Button playerScoreTextView;
     ArrayAdapter mArrayAdapter;
@@ -38,9 +40,10 @@ public class SinglePlayerActivity extends Activity {
     Board board = null;
     TextView currentWordText;
     ArrayList<String> letters;
-    Button timerText;
+    TextView timerText;
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
+    AlertDialog.Builder foundAndAllWords;
     long timeBlinkInMilliSeconds = 60 * 1000;
     protected static Activity singplePlayerActivity;
 
@@ -53,22 +56,25 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
         clearButton = (Button) findViewById(R.id.btnClear);
-
+        showWords = (Button) findViewById(R.id.btnShowWords);
         letters = new ArrayList<>();
         mNameList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        timerText = (Button) findViewById(R.id.txtTimer);
+        timerText = (TextView) findViewById(R.id.txtTimer);
         buttonsClicked = new ArrayList<>();
 
         //Set up username dialog
         usernameBuilder = new AlertDialog.Builder(this);
         usernameBuilder.setTitle("You reached a new high score! Please enter username!");
 
+
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         usernameBuilder.setView(input);
+
+
 
         // Set up the buttons
         usernameBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -92,6 +98,8 @@ public class SinglePlayerActivity extends Activity {
                 dialog.cancel();
             }
         });
+
+
 
 
         // Populate the score mapping
@@ -119,7 +127,7 @@ public class SinglePlayerActivity extends Activity {
         new BackgroundGridTask().execute();
 //        adaptBoardToCharList();
 
-        new CountDownTimer(5 * 60000, 1000) {
+        new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -135,9 +143,11 @@ public class SinglePlayerActivity extends Activity {
             public void onFinish() {
                 timerText.setText("Done");
                 Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+                foundAndAllWords.show();
                 if (PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
+
                 finish();
             }
         }.start();
@@ -291,6 +301,26 @@ public class SinglePlayerActivity extends Activity {
         finish();
     }
 
+    public void onShowWordsButtonClick(View v){
+        foundAndAllWords = new AlertDialog.Builder(this);
+        foundAndAllWords.setTitle("Found Words");
+        List<Object> underlyingWordList = new ArrayList<>();
+        for(int i=0 ; i<mArrayAdapter.getCount() ; i++){
+            underlyingWordList.add(mArrayAdapter.getItem(i));
+        }
+        int count = board.words.size();
+        Toast.makeText(getApplicationContext(), "count is" + count, Toast.LENGTH_SHORT );
+
+        final CharSequence[] words = underlyingWordList.toArray(new String[underlyingWordList.size()]);
+        foundAndAllWords.setItems(words, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                String selectedText = words[item].toString();  //Selected item in listview
+            }
+       });
+      AlertDialog alertDialogObject = foundAndAllWords.create();
+        alertDialogObject.show();
+    }
+
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -307,6 +337,8 @@ public class SinglePlayerActivity extends Activity {
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
+                        btn.setTextSize(22.0f);
+                        btn.setTypeface(null, Typeface.BOLD);
                         btn.setTag(i);
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -345,6 +377,8 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+
     }
 
     public void goToPreviousActivity(View v){

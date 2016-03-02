@@ -27,13 +27,13 @@
                     android:background="@drawable/greybutton"
                     android:text="&#xf060;"
                     android:textStyle="bold"
-                    android:textSize="35dp"
+                    android:textSize="35sp"
                     android:layout_weight="1"
                     android:textColor="#fff"
                     android:onClick="goToPreviousActivity"
                     android:nestedScrollingEnabled="false">
                 </Button>
-                <Button
+                <TextView
                     android:id="@+id/txtTimer"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
@@ -43,28 +43,28 @@
                     android:text="0:00"
                     android:background="@drawable/greybutton"
                     android:textColor="#fff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     />
                 <Button
                     android:id="@+id/txtPlayerScore"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:gravity="center"
                     android:text="0"
                     android:layout_weight="2"
                     android:background="@drawable/greybutton"
                     android:textColor="#fff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     />
                 <Button
                     android:id="@+id/btnClear"
                     android:background="@drawable/greybutton"
                     android:text="&#xf021;"
-                    android:textSize="35dp"
+                    android:textSize="35sp"
                     android:textColor="#fff"
                     android:layout_span="1"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -73,14 +73,28 @@
                     android:id="@+id/btnDone"
                     android:background="@drawable/greybutton"
                     android:text="&#xf04d;"
-                    android:textSize="30dp"
+                    android:textSize="30sp"
                     android:textColor="#fff"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:onClick="onDoneButtonClick"
                     android:layout_weight="1"
                     />
+                <Button
+                    android:id="@+id/btnShowWords"
+                    android:background="@drawable/greybutton"
+                    android:text="&#xf0eb;"
+                    android:textSize="30sp"
+                    android:textColor="#fff"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:onClick="onShowWordsButtonClick"
+                    android:layout_weight="1"
+                    />
+
+
             </TableRow>
         </TableLayout>
 <TableLayout
@@ -95,7 +109,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="#fff"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_alignParentRight="true"/>

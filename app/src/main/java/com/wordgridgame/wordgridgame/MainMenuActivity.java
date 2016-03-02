@@ -28,4 +28,6 @@ public class MainMenuActivity extends Activity {
         Intent intent=new Intent(getApplicationContext(),HelpMenuActivity.class);
         startActivity(intent);
     }
+
+
 }

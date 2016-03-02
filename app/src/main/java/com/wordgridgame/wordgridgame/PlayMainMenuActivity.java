@@ -14,7 +14,7 @@ public class PlayMainMenuActivity extends Activity {
     }
 
     public void goToSinglePlayer(View view) {
-        Intent intent = new Intent(this, SinglePlayerActivity.class);
+        Intent intent = new Intent(this, ShakerDemo.class);
         startActivity(intent);
     }
 
@@ -26,4 +26,5 @@ public class PlayMainMenuActivity extends Activity {
         Intent intent =new Intent(this,BluetoothMenuActivity.class);
         startActivity(intent);
     }
+
 }
