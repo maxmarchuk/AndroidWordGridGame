@@ -51,12 +51,13 @@ public class JoinGameActivity extends Activity {
                         deviceAddress=d.getAddress();
                 }
 
+                if(deviceAddress!=null) {
 
-                    BluetoothDevice remoteDevice=BTAdapter.getRemoteDevice(deviceAddress);
+                    BluetoothDevice remoteDevice = BTAdapter.getRemoteDevice(deviceAddress);
 
-                        ConnectThread t=new ConnectThread(remoteDevice);
-                        t.start();
-
+                    ConnectThread t = new ConnectThread(remoteDevice);
+                    t.start();
+                }
 
 
             }
@@ -107,10 +108,12 @@ public class JoinGameActivity extends Activity {
                     if(device!=null)
                     // Add the name and address to an array adapter to show in a ListView
                     try {
-
-                    setDevice.add(device);
-                    deviceList.add(device.getName());
-                    mArrayAdapter.notifyDataSetChanged();
+                        String dName=device.getName();
+                        if(dName!=null && !dName.equals("")) {
+                            setDevice.add(device);
+                            deviceList.add(dName);
+                            mArrayAdapter.notifyDataSetChanged();
+                        }
 
                     }catch (Exception ee){System.out.println(ee.toString());}
                 }
