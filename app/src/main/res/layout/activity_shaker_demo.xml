@@ -33,6 +33,15 @@
             android:layout_below="@+id/txtBoggle"
             android:text="Shake to generate board and begin!"
             />
-
+    
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/black1dpborder"
+        android:text="Skip"
+        android:textColor="#80ffffff"
+        android:onClick="goToSingleplayer"/>
 
 </RelativeLayout>

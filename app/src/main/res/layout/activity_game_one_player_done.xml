@@ -40,10 +40,17 @@
         android:layout_width="match_parent">
 
         <TextView
-            android:id="@+id/txtGameStatus"
-            android:gravity="center"
-            android:text="Game Over"
-            android:textColor="@color/accent"
+            android:gravity="right"
+            android:text="Score: "
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:textSize="50dp"/>
+        <TextView
+            android:id="@+id/txtScore"
+            android:gravity="left"
+            android:text="0"
+            android:layout_weight="1"
+            android:textColor="#fff"
             android:textSize="50dp"/>
     </TableRow>
 
@@ -62,13 +69,14 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:textSize="20dp"
+            android:textColor="#fff"
             android:layout_weight="1"
-
             android:text="Words Found"/>
 
         <TextView
             android:gravity="center"
             android:layout_width="0dip"
+            android:textColor="#fff"
             android:layout_height="match_parent"
             android:textSize="20dp"
             android:layout_weight="1"

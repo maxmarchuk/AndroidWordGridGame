@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -30,8 +31,7 @@ public class ShakerDemo extends Activity implements Shaker.Callback {
         Log.d("ShakerDemo", "Shaking started!");
         //transcript.setText(transcript.getText().toString() + "Shaking started\n");
         //scroll.fullScroll(View.FOCUS_DOWN);
-        Intent intent = new Intent (getApplicationContext(),SinglePlayerActivity.class);
-        startActivity(intent);
+
 
     }
     public void shakingStopped() {
@@ -39,6 +39,11 @@ public class ShakerDemo extends Activity implements Shaker.Callback {
         //transcript.setText(transcript.getText().toString() + "Shaking stopped\n");
         //scroll.fullScroll(View.FOCUS_DOWN);
 
+    }
+
+    public void goToSingleplayer(View v){
+        Intent intent = new Intent (getApplicationContext(), SinglePlayerActivity.class);
+        startActivity(intent);
     }
 }
 

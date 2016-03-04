@@ -3,7 +3,9 @@ package com.wordgridgame.wordgridgame;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +18,10 @@ import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +41,7 @@ public class SinglePlayerActivity extends Activity {
     Button playerScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
+    Intent gameFinishIntent;
     HashMap<Integer, Integer> scoreMap;
     HillClimber hc;
     Board board = null;
@@ -46,6 +53,11 @@ public class SinglePlayerActivity extends Activity {
     AlertDialog.Builder foundAndAllWords;
     long timeBlinkInMilliSeconds = 60 * 1000;
     protected static Activity singplePlayerActivity;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
@@ -110,6 +122,7 @@ public class SinglePlayerActivity extends Activity {
         scoreMap.put(8, 11);
 
         initFonts();
+        gameFinishIntent =  new Intent(getBaseContext(), GameOnePlayerDoneActivity.class);
     }
 
     @Override
@@ -124,7 +137,7 @@ public class SinglePlayerActivity extends Activity {
         new GenerateWordListTask().execute();
 //        adaptBoardToCharList();
 
-        new CountDownTimer(5 * 60000, 1000) {
+        new CountDownTimer(5 * 3000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -138,33 +151,9 @@ public class SinglePlayerActivity extends Activity {
             }
 
             public void onFinish() {
-                timerText.setText("Done");
-                Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-                foundAndAllWords.show();
-                if (PlayerInfoHelper.isNewScore(currentScore)) {
-                    usernameBuilder.show();
-                }
-                finish();
+                finishGame();
             }
         }.start();
-
-        // Submit Button Click Listener
-        // On clicking submit, get the word length and add its respective score to the total score
-        //Also add the word to the list of submitted words.
-//        submitButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String submittedWord = currentWordText.getText().toString();
-//                boolean validWord = valid(submittedWord);
-//
-//                // If the words was valid, we know it's already added to the
-//                // word list so we can clear the current word text
-//                if (validWord) {
-//                    addWord(submittedWord);
-//                    resetGrid();
-//                }
-//            }
-//        });
 
         // On clicking clear button, empty the current word
         clearButton.setOnClickListener(
@@ -175,6 +164,10 @@ public class SinglePlayerActivity extends Activity {
                     }
                 }
         );
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     // returns false if the word isn't long enough or isn't in the dictionary of valid words
@@ -225,6 +218,21 @@ public class SinglePlayerActivity extends Activity {
             resetGrid();
             return;
         }
+
+    }
+
+    private void finishGame(){
+        timerText.setText("-:--");
+        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+
+        if (PlayerInfoHelper.isNewScore(currentScore)) {
+            usernameBuilder.show();
+        }
+        // Add the data to the finish game activity
+        gameFinishIntent.putExtra("score", 2);
+        gameFinishIntent.putExtra("foundWords", mNameList);
+        gameFinishIntent.putExtra("allWords", board.words);
+        startActivity(gameFinishIntent);
 
     }
 
@@ -297,24 +305,64 @@ public class SinglePlayerActivity extends Activity {
         finish();
     }
 
-    public void onShowWordsButtonClick(View v){
+    public void onShowWordsButtonClick(View v) {
         foundAndAllWords = new AlertDialog.Builder(this);
         foundAndAllWords.setTitle("Found Words");
         List<Object> underlyingWordList = new ArrayList<>();
-        for(int i=0 ; i<mArrayAdapter.getCount() ; i++){
+        for (int i = 0; i < mArrayAdapter.getCount(); i++) {
             underlyingWordList.add(mArrayAdapter.getItem(i));
         }
         int count = board.words.size();
-        Toast.makeText(getApplicationContext(), "count is" + count, Toast.LENGTH_SHORT );
+        Toast.makeText(getApplicationContext(), "count is" + count, Toast.LENGTH_SHORT);
 
         final CharSequence[] words = underlyingWordList.toArray(new String[underlyingWordList.size()]);
         foundAndAllWords.setItems(words, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 String selectedText = words[item].toString();  //Selected item in listview
             }
-       });
-      AlertDialog alertDialogObject = foundAndAllWords.create();
+        });
+        AlertDialog alertDialogObject = foundAndAllWords.create();
         alertDialogObject.show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "SinglePlayer Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.wordgridgame.wordgridgame/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "SinglePlayer Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.wordgridgame.wordgridgame/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
@@ -373,10 +421,10 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(),FontManager.FONTAWESOME));
+        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
     }
 
-    public void goToPreviousActivity(View v){
+    public void goToPreviousActivity(View v) {
         finish();
     }
 
