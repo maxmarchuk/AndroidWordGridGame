@@ -74,8 +74,6 @@ public class SinglePlayerActivity extends Activity {
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         usernameBuilder.setView(input);
 
-
-
         // Set up the buttons
         usernameBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -100,8 +98,6 @@ public class SinglePlayerActivity extends Activity {
         });
 
 
-
-
         // Populate the score mapping
         // *Key*: Word Length
         // *Value*: Points
@@ -119,15 +115,16 @@ public class SinglePlayerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_player);
+        setContentView(R.layout.content_single_player);
         singplePlayerActivity = this;
 
         //initialize everything
         init();
         new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
 //        adaptBoardToCharList();
 
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(5 * 60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -147,7 +144,6 @@ public class SinglePlayerActivity extends Activity {
                 if (PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
-
                 finish();
             }
         }.start();
@@ -377,11 +373,17 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-
+        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(),FontManager.FONTAWESOME));
     }
 
     public void goToPreviousActivity(View v){
         finish();
+    }
+
+    public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            board.getWords();
+            return null;
+        }
     }
 }

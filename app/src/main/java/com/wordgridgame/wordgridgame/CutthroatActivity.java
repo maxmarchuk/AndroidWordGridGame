@@ -94,6 +94,8 @@ public class CutthroatActivity extends Activity {
         //initialize everything
         init();
         new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
+
 //        adaptBoardToCharList();
 
         new CountDownTimer(1 * 30000, 1000) {
@@ -343,5 +345,11 @@ public class CutthroatActivity extends Activity {
             Toast.makeText(CutthroatActivity.this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
         }
         finish();
+    }
+    public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            board.getWords();
+            return null;
+        }
     }
 }

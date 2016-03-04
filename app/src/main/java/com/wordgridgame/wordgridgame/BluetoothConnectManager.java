@@ -76,5 +76,4 @@ public class BluetoothConnectManager extends Thread {
 
         }catch (Exception ee){return null;}
     }
-
 }

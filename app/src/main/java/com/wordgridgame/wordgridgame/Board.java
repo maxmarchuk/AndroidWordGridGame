@@ -133,9 +133,7 @@ public class Board {
                 board[i][j].traverse("");
             }
         }
-        System.out.println("!!!! DONE GETTING WORDS. VALID COUNT: "+ words.size());
 
         return words;
     }
-
 }

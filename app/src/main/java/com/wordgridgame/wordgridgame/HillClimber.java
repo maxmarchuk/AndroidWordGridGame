@@ -55,24 +55,7 @@ public class HillClimber {
     {
         randomGrid();
         board=new Board(grid, this.context);
-        //begin climb
-        ArrayList<String> list =new ArrayList<String>();
-
-        do{
-            list=board.getWords();
-        } while(list.size()<5);
-
-        for(int i=0;i<list.size();i++){
-            System.out.println(list.get(i));
-        }
-        for(int i=0;i<4;i++){
-            for(int j=0;j<4;j++){
-                System.out.print(" " +board.board[i][j].letter+" ");
-            }
-            System.out.println();
-        }
 
         return board;
-
     }
 }
