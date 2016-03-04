@@ -46,7 +46,7 @@ public class BluetoothHostGameActivity extends Activity {
     Board board = null;
     TextView currentWordText;
     ArrayList<String> letters;
-    Button timerText;
+    TextView timerText;
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
     long timeBlinkInMilliSeconds = 60 * 1000;
@@ -108,7 +108,7 @@ public class BluetoothHostGameActivity extends Activity {
         mNameList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        timerText = (Button) findViewById(R.id.txtTimer);
+        timerText = (TextView) findViewById(R.id.txtTimer);
         buttonsClicked = new ArrayList<>();
 
         //Set up username dialog
