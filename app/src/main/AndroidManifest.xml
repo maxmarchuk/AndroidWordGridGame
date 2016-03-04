@@ -50,6 +50,10 @@
         <activity
             android:name=".HelpMenuActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".GameOnePlayerDoneActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
     </application>
 
 </manifest>
