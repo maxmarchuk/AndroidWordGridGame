@@ -57,6 +57,10 @@
 
 
 
+        <activity
+            android:name=".GameOnePlayerDoneActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
     </application>
 
 </manifest>
