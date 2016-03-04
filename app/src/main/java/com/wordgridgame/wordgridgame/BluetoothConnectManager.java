@@ -2,8 +2,11 @@ package com.wordgridgame.wordgridgame;
 
 import android.bluetooth.BluetoothSocket;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
@@ -51,5 +54,26 @@ public class BluetoothConnectManager extends Thread {
                 return null;
             }
         }
+    }
+
+    public void sendObject(Object o){
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(mmOutStream);
+            oos.writeObject(o);
+            oos.flush();
+            oos.close();
+        }catch (Exception ee){
+            System.out.println("Serialization Save Error : "+ee.toString());
+
+        }
+    }
+
+    public Object readObject(){
+        try{
+            ObjectInputStream ois=new ObjectInputStream(mmInStream);
+            Object o=ois.readObject();
+            return o;
+
+        }catch (Exception ee){return null;}
     }
 }
