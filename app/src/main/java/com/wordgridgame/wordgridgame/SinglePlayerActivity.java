@@ -117,6 +117,7 @@ public class SinglePlayerActivity extends Activity {
         //initialize everything
         init();
         new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
 //        adaptBoardToCharList();
 
         new CountDownTimer(5 * 60000, 1000) {
@@ -296,6 +297,7 @@ public class SinglePlayerActivity extends Activity {
         protected Void doInBackground(Void... params) {
             hc = new HillClimber(getApplicationContext());
             board = hc.climb();
+
             adaptBoardToCharList();
 
             singplePlayerActivity.runOnUiThread(new Runnable() {
@@ -351,5 +353,12 @@ public class SinglePlayerActivity extends Activity {
 
     public void goToPreviousActivity(View v){
         finish();
+    }
+
+    public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            board.getWords();
+            return null;
+        }
     }
 }
