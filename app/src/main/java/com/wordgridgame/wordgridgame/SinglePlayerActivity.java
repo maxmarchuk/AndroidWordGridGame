@@ -111,7 +111,7 @@ public class SinglePlayerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_player);
+        setContentView(R.layout.content_single_player);
         singplePlayerActivity = this;
 
         //initialize everything
@@ -308,6 +308,7 @@ public class SinglePlayerActivity extends Activity {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
                         btn.setTag(i);
+//                        btn.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -345,6 +346,7 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+
     }
 
     public void goToPreviousActivity(View v){

@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,9 +47,11 @@ public class JoinGameActivity extends Activity {
             public void onClick(View v) {
                 String deviceName=selectedItem;
                 String deviceAddress=null;
-                for(BluetoothDevice d : setDevice){
-                    if(d.getName().equals(deviceName))
-                        deviceAddress=d.getAddress();
+                for(BluetoothDevice d : setDevice) {
+                    if (d.getName() != null || d.getName() != "") {
+                        if (d.getName().equals(deviceName))
+                            deviceAddress = d.getAddress();
+                    }
                 }
 
 
@@ -152,6 +155,18 @@ public class JoinGameActivity extends Activity {
                 } catch (IOException closeException) { }
                 return;
             }
+
+            BluetoothConnectManager bluetoothConnectManager =  new BluetoothConnectManager(mmSocket);
+            final String message;
+            message = new String(bluetoothConnectManager.readData());
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                }
+            });
 
             // Do work to manage the connection (in a separate thread)
             //manageConnectedSocket(mmSocket);

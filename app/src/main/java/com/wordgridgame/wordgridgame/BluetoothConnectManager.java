@@ -52,5 +52,4 @@ public class BluetoothConnectManager extends Thread {
             }
         }
     }
-
 }

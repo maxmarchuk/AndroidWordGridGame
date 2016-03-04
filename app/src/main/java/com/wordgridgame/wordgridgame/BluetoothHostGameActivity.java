@@ -31,7 +31,6 @@ public class BluetoothHostGameActivity extends Activity {
     //bluetooth stuff
     public static int REQUEST_BLUETOOTH = 1;
     BluetoothAdapter BTAdapter;
-    TextView txtViewMsg;
 
     //gameplay stuff
     GridLayout letterGrid;
@@ -51,19 +50,18 @@ public class BluetoothHostGameActivity extends Activity {
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
     long timeBlinkInMilliSeconds = 60 * 1000;
-    protected static Activity singplePlayerActivity;
+    protected static Activity BluetoothHostGameActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_player);
-        singplePlayerActivity = this;
+        setContentView(R.layout.activity_bluetooth_host_game);
+        BluetoothHostGameActivity = this;
 
         //initialize everything
         init();
         initBluetooth();
         new BackgroundGridTask().execute();
-//        adaptBoardToCharList();
 
         new CountDownTimer(5 * 60000, 1000) {
 
@@ -161,7 +159,7 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private void initBluetooth(){
-        txtViewMsg=(TextView)findViewById(R.id.txtCurrentWord);
+        currentWordText=(TextView)findViewById(R.id.txtCurrentWord);
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!BTAdapter.isEnabled()) {
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -299,7 +297,7 @@ public class BluetoothHostGameActivity extends Activity {
             board = hc.climb();
             adaptBoardToCharList();
 
-            singplePlayerActivity.runOnUiThread(new Runnable() {
+            BluetoothHostGameActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     //Set the gridview's data to new list of letters
@@ -374,7 +372,7 @@ public class BluetoothHostGameActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txtViewMsg.setText("Waiting for player to join");
+                            currentWordText.setText("Waiting for player to join");
 
                         }
                     });
@@ -390,11 +388,13 @@ public class BluetoothHostGameActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "Connection with other player successful",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Connection with other player successful", Toast.LENGTH_SHORT).show();
+                            currentWordText.setText("");
 
                         }
                     });
+                    BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
+                    bluetoothConnectManager.sendData("Hey what's up client".getBytes());
 
                     //TODO work to manage the connection (in a separate thread) and start game
                     try {
@@ -403,7 +403,7 @@ public class BluetoothHostGameActivity extends Activity {
                         break;
                     }
                 }else{
-                    txtViewMsg.setText("ERROR: Bluetooth server socket is null");
+                    currentWordText.setText("ERROR: Bluetooth server socket is null");
                 }
 
             }

@@ -11,16 +11,14 @@
     android:background="@drawable/background">
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/listViewDevices"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:layout_marginBottom="103dp" />
 
     <Button
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="Join"
         android:id="@+id/btnJoin"
         android:layout_alignParentBottom="true"
