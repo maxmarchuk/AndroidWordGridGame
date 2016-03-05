@@ -2,6 +2,7 @@ package com.wordgridgame.wordgridgame;
 
 import android.bluetooth.BluetoothSocket;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,5 +76,24 @@ public class BluetoothConnectManager extends Thread {
             return o;
 
         }catch (Exception ee){return null;}
+    }
+
+    public byte[] serialize(Board board) throws IOException {
+        try {
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ObjectOutputStream o = new ObjectOutputStream(b);
+            o.writeObject(board);
+            return b.toByteArray();
+        }catch (Exception ee){
+            return null;}
+    }
+    //AbstractMessage was actually the message type I used, but feel free to choose your own type
+    public static Board deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+        try {
+            ByteArrayInputStream b = new ByteArrayInputStream(bytes);
+            ObjectInputStream o = new ObjectInputStream(b);
+            return (Board) o.readObject();
+        }catch (Exception ee){
+            return null;}
     }
 }

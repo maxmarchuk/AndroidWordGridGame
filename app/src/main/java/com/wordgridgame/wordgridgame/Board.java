@@ -7,18 +7,21 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import static java.lang.System.out;
 
 /**
  * Created by lyf on 2016/1/25.
  */
-public class Board {
+public class Board  implements Serializable {
+    private static final long serialVersionUID = 7863262235394607247L;
     public Letter[][] board;
     private ArrayList<String> dict=new ArrayList<String>();
     public ArrayList<String> words=new ArrayList<String>();
 
-    class Letter {
+    class Letter implements Serializable{
+        private static final long serialVersionUID = 012L;
         public char letter;
         public int X;
         public int Y;
