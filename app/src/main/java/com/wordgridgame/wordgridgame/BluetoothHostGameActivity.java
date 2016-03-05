@@ -394,9 +394,12 @@ public class BluetoothHostGameActivity extends Activity {
                         }
                     });
                     BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
-                    bluetoothConnectManager.sendData("Hey what's up client".getBytes());
+                    //send board
+                    bluetoothConnectManager.sendObject(board);
+                    String returnMsg=new String(bluetoothConnectManager.readData());
+                    if(returnMsg.startsWith("Board received"))
+                        bluetoothConnectManager.sendData("Hey what's up client".getBytes());
 
-                    //TODO work to manage the connection (in a separate thread) and start game
                     try {
                         mmServerSocket.close();
                     }catch (IOException e) {
