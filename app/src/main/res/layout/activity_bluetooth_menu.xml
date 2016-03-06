@@ -10,27 +10,94 @@
     tools:context=".BluetoothMenuActivity"
     android:background="@drawable/background">
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:text="Create Game"
-        android:id="@+id/btnCreate"
+    <TextView
+        android:id="@+id/txtBoggle"
+        android:textColor="@color/accent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:drawableStart="@drawable/logo"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="136dp"
-        android:onClick="CreateGame"
-        android:nestedScrollingEnabled="true"
-        android:background="@drawable/shape" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableLayout">
+        <TableRow
+            android:gravity="center"
+            android:id="@+id/title_container"
+            android:layout_marginTop="100dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtBoggle"
+            android:textColor="@color/accent"
+            android:text="Host a Game!"
+            android:gravity="center"
+            android:typeface="serif"
+            android:textSize="32sp"
+            android:id="@+id/textView2" />
+
+        </TableRow>
+
+
+        <TableRow
+            android:gravity="center"
+            android:id="@+id/creategamecontainer"
+            android:layout_alignStart="@+id/textView2"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:text="Cutthroat Mode"
+                android:id="@+id/btnCutthroat"
+                android:onClick="CreateGame"
+                android:background="@drawable/shape"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"/>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:text="Basic Mode"
+                android:id="@+id/btnBasic"
+                android:onClick="CreateGame"
+                android:background="@drawable/shape"
+                android:layout_marginRight="10dp"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_below="@+id/creategamecontainer"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:text="Join A Game"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="32sp"
+                android:textColor="@color/accent"
+                />
+        </TableRow>
+
+   <TableRow
+       android:gravity="center"
+       android:layout_marginTop="10dp">
 
     <Button
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:text="Join Game"
         android:id="@+id/btnJoin"
-        android:layout_below="@+id/btnCreate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
         android:onClick="JoinGame"
-        android:nestedScrollingEnabled="true"
         android:background="@drawable/shape" />
+   </TableRow>
+
+    </TableLayout>
 </RelativeLayout>

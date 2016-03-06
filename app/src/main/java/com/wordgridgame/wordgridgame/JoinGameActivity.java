@@ -152,6 +152,7 @@ public class JoinGameActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //go to BluetoothClientGameActivity
                         Toast.makeText(getApplicationContext(), "Connected to server!",
                                 Toast.LENGTH_LONG).show();
 
@@ -189,5 +190,6 @@ public class JoinGameActivity extends Activity {
             } catch (IOException e) { }
         }
     }
+
 
 }
