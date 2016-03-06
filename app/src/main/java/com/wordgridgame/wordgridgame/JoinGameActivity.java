@@ -171,7 +171,7 @@ public class JoinGameActivity extends Activity {
             //set up connectManager and go to new Activity
             BluetoothConnectManager.mmSocket=this.mmSocket;
 
-            Intent intent=new Intent(getApplicationContext(),OnGameJoinActivity.class);
+            Intent intent=new Intent(getApplicationContext(),BluetoothClientGameActivity.class);
             startActivity(intent);
 
         }
@@ -182,6 +182,10 @@ public class JoinGameActivity extends Activity {
                 mmSocket.close();
             } catch (IOException e) { }
         }
+    }
+    public void goToOnGameJoin(View v){
+        Intent intent = new Intent (getApplicationContext(), BluetoothClientGameActivity.class);
+        startActivity(intent);
     }
 
 

@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -306,6 +307,9 @@ public class BluetoothHostGameActivity extends Activity {
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
+                        btn.setText(letters.get(i));
+                        btn.setTextSize(32.0f);
+                        btn.setTypeface(null, Typeface.BOLD);
                         btn.setTag(i);
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
