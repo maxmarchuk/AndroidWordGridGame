@@ -167,20 +167,13 @@ public class JoinGameActivity extends Activity {
                 return;
             }
 
-            BluetoothConnectManager bluetoothConnectManager =  new BluetoothConnectManager(mmSocket);
-            final String message;
-            message = new String(bluetoothConnectManager.readData());
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            //set up connectManager and go to new Activity
+            BluetoothConnectManager.mmSocket=this.mmSocket;
 
-                }
-            });
+            Intent intent=new Intent(getApplicationContext(),OnGameJoinActivity.class);
+            startActivity(intent);
 
-            // Do work to manage the connection (in a separate thread)
-            //manageConnectedSocket(mmSocket);
         }
 
         /** Will cancel an in-progress connection, and close the socket */
