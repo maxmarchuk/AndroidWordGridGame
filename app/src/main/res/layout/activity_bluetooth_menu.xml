@@ -59,7 +59,7 @@
                 android:text="Cutthroat Mode"
                 android:id="@+id/btnCutthroat"
                 android:layout_weight="1"
-                android:onClick="CreateGame"
+                android:onClick="CreateCutthroatGame"
                 android:background="@drawable/shape"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"/>

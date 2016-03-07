@@ -21,7 +21,15 @@ public class BluetoothMenuActivity extends Activity {
         startActivity(intent);
     }
     public void CreateGame(View view){
-        Intent intent =new Intent(this,BluetoothHostGameActivity.class);
+        Intent intent = new Intent(this,BluetoothHostGameActivity.class);
+        intent.putExtra("gameType", "basic");
         startActivity(intent);
     }
+
+    public void CreateCutthroatGame(View view){
+        Intent intent = new Intent(this,BluetoothHostGameActivity.class);
+        intent.putExtra("gameType", "cutthroat");
+        startActivity(intent);
+    }
+
 }

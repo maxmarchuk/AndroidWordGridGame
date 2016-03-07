@@ -44,6 +44,7 @@ public class BluetoothClientGameActivity extends Activity {
     TextView player2ScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
+    ArrayList hostWordList;
     HashMap<Integer, Integer> scoreMap;
     HillClimber hc;
     Board board = null;
@@ -57,6 +58,7 @@ public class BluetoothClientGameActivity extends Activity {
     protected static Activity BluetoothClientGameActivity;
     Intent gameFinishIntent;
     boolean gameDone = false;
+    String gameType;
 
 
     @Override
@@ -64,10 +66,10 @@ public class BluetoothClientGameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_client_game);
         BluetoothClientGameActivity = this;
+
         //initialize everything
         init();
         new BackgroundGridTask().execute();
-//        new GenerateWordListTask().execute();
         new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -111,6 +113,7 @@ public class BluetoothClientGameActivity extends Activity {
 
         letters = new ArrayList<>();
         mNameList = new ArrayList();
+        hostWordList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
@@ -121,6 +124,7 @@ public class BluetoothClientGameActivity extends Activity {
         BluetoothConnectManager bcm=new BluetoothConnectManager();
         clientConnectManager = bcm;
         board=(Board)bcm.readObject();
+        gameType = (String)bcm.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
             {
@@ -163,6 +167,19 @@ public class BluetoothClientGameActivity extends Activity {
                 } catch (Exception e) {
                     System.out.println("Object not an integer: " + e.getMessage());
                 }
+                try{
+                    final String newWord= (String) tempObj;
+                    if(newWord != null) {
+                        BluetoothClientGameActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                addHostWord(newWord);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    System.out.println("Object not an String: " + e.getMessage());
+                }
 
             }
             return null;
@@ -173,6 +190,17 @@ public class BluetoothClientGameActivity extends Activity {
         System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
         player1ScoreTextView.setText(newScore.toString());
     }
+
+    private void addHostWord(String newWord) {
+        System.out.println("!!! ADDING NEW WORD: " + newWord);
+        hostWordList.add(newWord);
+    }
+
+    private void sendNewClientWord(String newWord) {
+        System.out.println("!!! SENDING WORD: " + newWord);
+        clientConnectManager.sendObject(newWord);
+    }
+
     private void gameEnded(){
         gameDone = true;
         clientConnectManager.close();
@@ -309,7 +337,7 @@ public class BluetoothClientGameActivity extends Activity {
         int length = word.length();
 
         // make sure the word isn't inserted yet
-        if (mNameList.contains(word)) {
+        if (wordAlreadyAdded(word)) {
             Toast.makeText(getApplicationContext(), "Word already added", Toast.LENGTH_SHORT).show();
             resetGrid();
             return false;
@@ -331,6 +359,17 @@ public class BluetoothClientGameActivity extends Activity {
         return true;
     }
 
+    private boolean wordAlreadyAdded(String word){
+        if(gameType.equals("cutthroat")){
+            return (mNameList.contains(word) || hostWordList.contains(word));
+        } else if (gameType.equals("basic")){
+            return mNameList.contains(word);
+        }
+        else {
+            return mNameList.contains(word);
+        }
+    }
+
     //requires getting score from server
     private void addWord(String word){
         int currentScore = getPlayer2Score();
@@ -340,10 +379,12 @@ public class BluetoothClientGameActivity extends Activity {
             currentScore += scoreMap.get(length);
             player2ScoreTextView.setText(String.valueOf(currentScore));
             sendNewClientScore(currentScore);
+            sendNewClientWord(word);
         } else {
             currentScore += 11;
             player2ScoreTextView.setText(String.valueOf(currentScore));
             sendNewClientScore(currentScore);
+            sendNewClientWord(word);
         }
 
         if (isInDictionary(word)) {

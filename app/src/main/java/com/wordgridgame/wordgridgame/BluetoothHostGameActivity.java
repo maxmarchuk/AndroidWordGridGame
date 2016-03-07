@@ -47,6 +47,7 @@ public class BluetoothHostGameActivity extends Activity {
     TextView player2ScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
+    ArrayList clientWordList;
     HashMap<Integer, Integer> scoreMap;
     HillClimber hc;
     Board board = null;
@@ -60,12 +61,14 @@ public class BluetoothHostGameActivity extends Activity {
     protected static Activity BluetoothHostGameActivity;
     Intent gameFinishIntent;
     boolean gameDone = false;
+    String gameType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_host_game);
         BluetoothHostGameActivity = this;
+        gameType = getIntent().getExtras().getString("gameType");
 
         //initialize everything
         init();
@@ -134,6 +137,7 @@ public class BluetoothHostGameActivity extends Activity {
 
         letters = new ArrayList<>();
         mNameList = new ArrayList();
+        clientWordList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
@@ -199,12 +203,26 @@ public class BluetoothHostGameActivity extends Activity {
         new AcceptThread().start();
     }
 
+    private boolean wordAlreadyAdded(String word){
+        System.out.println("CLIENT WORD LIST: " + clientWordList);
+        if(gameType.equals("cutthroat")){
+            boolean contains = (mNameList.contains(word) || clientWordList.contains(word));
+            System.out.println("CONTAINS THE WORD: " + contains);
+            return contains;
+        } else if (gameType.equals("basic")){
+            return mNameList.contains(word);
+        }
+        else {
+            return mNameList.contains(word);
+        }
+    }
+
     // returns false if the word isn't long enough or isn't in the dictionary of valid words
     private boolean valid(String word) {
         int length = word.length();
 
         // make sure the word isn't inserted yet
-        if (mNameList.contains(word)) {
+        if (wordAlreadyAdded(word)) {
             Toast.makeText(getApplicationContext(), "Word already added", Toast.LENGTH_SHORT).show();
             resetGrid();
             return false;
@@ -234,6 +252,7 @@ public class BluetoothHostGameActivity extends Activity {
             currentScore += scoreMap.get(length);
             playerScoreTextView.setText(String.valueOf(currentScore));
             sendNewHostScore(currentScore);
+            sendNewHostWord(word);
         } else {
             currentScore += 11;
             playerScoreTextView.setText(String.valueOf(currentScore));
@@ -257,6 +276,10 @@ public class BluetoothHostGameActivity extends Activity {
         hostConnectManager.sendObject(newScore);
     }
 
+    private void sendNewHostWord(String newWord) {
+        System.out.println("!!! SENDING WORD: " + newWord);
+        hostConnectManager.sendObject(newWord);
+    }
     private void resetGridCellColors() {
         for (int i = 0; i < letterGrid.getChildCount(); i++) {
             Button btn = (Button) letterGrid.getChildAt(i);
@@ -354,6 +377,20 @@ public class BluetoothHostGameActivity extends Activity {
                     System.out.println("Object not an integer");
                 }
 
+                try{
+                    final String newWord= (String) tempObj;
+                    if(newWord != null) {
+                        BluetoothHostGameActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                addClientWord(newWord);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    System.out.println("Object not an String: " + e.getMessage());
+                }
+
             }
             return null;
         }
@@ -363,6 +400,13 @@ public class BluetoothHostGameActivity extends Activity {
         System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
         player2ScoreTextView.setText(newScore.toString());
     }
+
+
+    private void addClientWord(String newWord) {
+        System.out.println("!!! ADDING NEW CLIENT WORD: " + newWord);
+        clientWordList.add(newWord);
+    }
+
 
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
@@ -475,6 +519,7 @@ public class BluetoothHostGameActivity extends Activity {
                     new BluetoothListenerTask().execute();
                     //send board
                     bluetoothConnectManager.sendObject(board);
+                    bluetoothConnectManager.sendObject(gameType);
 
                     for(int i=0;i<4;i++){
                         for(int j=0;j<4;j++)
