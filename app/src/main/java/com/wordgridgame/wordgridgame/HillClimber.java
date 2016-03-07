@@ -41,14 +41,12 @@ public class HillClimber {
                 }
             }
         }
-        int newCount=board.getWords().size();
-        //recover board if total word count didn't increase
-        if(newCount<=wordsCount)
-            board.fromArray(temp);
-        else
-            wordsCount=newCount;
-
-
+//        int newCount=board.getWords().size();
+//        //recover board if total word count didn't increase
+//        if(newCount<=wordsCount)
+//            board.fromArray(temp);
+//        else
+//            wordsCount=newCount;
     }
 
     public Board climb()

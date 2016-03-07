@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class BluetoothHostGameActivity extends Activity {
 
     //gameplay stuff
     CountDownTimer gameTimer;
+    boolean wordsGenerated = false;
     GridLayout letterGrid;
     Button btnBackToMenu;
     Button btnDone;
@@ -55,6 +57,7 @@ public class BluetoothHostGameActivity extends Activity {
     long timeBlinkInMilliSeconds = 60 * 1000;
     Integer currentScore;
     protected static Activity BluetoothHostGameActivity;
+    Intent gameFinishIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,6 @@ public class BluetoothHostGameActivity extends Activity {
                 timerText.setText("Done");
                 currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
                 gameEnded();
-                finish();
             }
         };
         // On clicking clear button, empty the current word
@@ -103,18 +105,17 @@ public class BluetoothHostGameActivity extends Activity {
 
     private void gameEnded() {
         currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-        hostConnectManager.sendData(currentScore.toString().getBytes());
-        Integer clientScore=   Integer.parseInt(new String(hostConnectManager.readData()));
+        hostConnectManager.sendObject(currentScore);
 
-        if(currentScore>clientScore){
-            Toast.makeText(getApplicationContext(), "Host Wins!!!", Toast.LENGTH_SHORT).show();
-        }else if(clientScore>currentScore){
-            Toast.makeText(getApplicationContext(), "Client Wins", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), "Tie!!!", Toast.LENGTH_SHORT).show();
-        }
+        Integer clientScore = (Integer) hostConnectManager.readObject();
 
+        gameFinishIntent.putExtra("player1Score", currentScore);
+        gameFinishIntent.putExtra("player2Score", clientScore);
+        gameFinishIntent.putExtra("foundWords", mNameList);
+        gameFinishIntent.putExtra("allWords", board.words);
+        startActivity(gameFinishIntent);
 
+        finish();
     }
 
     private void init() {
@@ -178,6 +179,7 @@ public class BluetoothHostGameActivity extends Activity {
         scoreMap.put(8, 11);
 
         initFonts();
+        gameFinishIntent =  new Intent(getBaseContext(), GameTwoPlayerDone.class);
     }
 
     private void initBluetooth(){
@@ -315,6 +317,7 @@ public class BluetoothHostGameActivity extends Activity {
     public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
             board.getWords();
+            System.out.println("!!!!!!!! DONE GENERATING WORDS!");
             return null;
         }
     }
@@ -429,6 +432,7 @@ public class BluetoothHostGameActivity extends Activity {
                     hostConnectManager=bluetoothConnectManager;
                     //send board
                     bluetoothConnectManager.sendObject(board);
+
                     for(int i=0;i<4;i++){
                         for(int j=0;j<4;j++)
                         {
