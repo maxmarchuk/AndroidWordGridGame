@@ -131,11 +131,12 @@ public class Board  implements Serializable {
     //return current words
     public ArrayList<String> getWords(){
         words.clear();
-        for(int i=0;i<4;i++){
-            for(int j=0;j<4;j++){
-                board[i][j].traverse("");
-            }
-        }
+        words = dict;
+//        for(int i=0;i<4;i++){
+//            for(int j=0;j<4;j++){
+////                board[i][j].traverse("");
+//            }
+//        }
 
         return words;
     }

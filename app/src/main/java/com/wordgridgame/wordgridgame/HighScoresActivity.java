@@ -17,7 +17,7 @@ public class HighScoresActivity extends Activity {
 
         TextView scoreTxt=(TextView)findViewById(R.id.txtScores);
         String hiscores="";
-        ArrayList<String> list= PlayerInfoHelper.GetHiscores();
+        ArrayList<String> list= PlayerInfoHelper.GetHiscores(getApplicationContext());
         for(int i=0;i<list.size();i++) {
             String[] temp = list.get(i).split(",");
             hiscores += temp[0]+ " " + temp[1]+"\n";

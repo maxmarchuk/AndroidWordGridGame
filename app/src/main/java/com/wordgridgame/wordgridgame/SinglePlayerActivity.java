@@ -97,7 +97,7 @@ public class SinglePlayerActivity extends Activity {
                 } else {
                     PlayerInfoHelper.currentPlayerName = input.getText().toString();
                 }
-                PlayerInfoHelper.addNewScore(currentScore);
+                PlayerInfoHelper.addNewScore(currentScore, getApplicationContext());
                 goToDoneActivity();
             }
         });
@@ -142,7 +142,7 @@ public class SinglePlayerActivity extends Activity {
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
                 if (ms < timeBlinkInMilliSeconds) {
-                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
+//                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
                 }
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
@@ -225,10 +225,11 @@ public class SinglePlayerActivity extends Activity {
         timerText.setText("-:--");
         Integer currentScore = getCurrentScore();
 
-        if (PlayerInfoHelper.isNewScore(currentScore)) {
+        if (PlayerInfoHelper.isNewScore(currentScore, getApplicationContext())) {
             usernameBuilder.show();
         } else {
             goToDoneActivity();
+            finish();
         }
     }
 
@@ -303,7 +304,7 @@ public class SinglePlayerActivity extends Activity {
 
     public void onDoneButtonClick(View v) {
         Integer currentScore = getCurrentScore();
-        if (PlayerInfoHelper.isNewScore(currentScore)) {
+        if (PlayerInfoHelper.isNewScore(currentScore, getApplicationContext())) {
             usernameBuilder.show();
         }
         finish();

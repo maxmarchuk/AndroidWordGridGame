@@ -163,7 +163,7 @@ public class BluetoothHostGameActivity extends Activity {
                 } else {
                     PlayerInfoHelper.currentPlayerName = input.getText().toString();
                 }
-                PlayerInfoHelper.addNewScore(currentScore);
+                PlayerInfoHelper.addNewScore(currentScore, getApplicationContext());
 
 
             }
@@ -342,10 +342,6 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     public void onDoneButtonClick(View v) {
-        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-        if (PlayerInfoHelper.isNewScore(currentScore)) {
-            usernameBuilder.show();
-        }
         finish();
     }
 

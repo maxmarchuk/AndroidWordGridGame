@@ -316,10 +316,6 @@ public class BluetoothClientGameActivity extends Activity {
     }
 
     public void onDoneButtonClick(View v) {
-        Integer currentScore = getPlayer2Score();
-        if (PlayerInfoHelper.isNewScore(currentScore)) {
-            usernameBuilder.show();
-        }
         finish();
     }
 

@@ -1,8 +1,13 @@
 package com.wordgridgame.wordgridgame;
 
+import android.content.Context;
 import android.os.Environment;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -16,19 +21,21 @@ public class PlayerInfoHelper {
     static Integer hiscoresCount=5;
     static String currentPlayerName="default";
     //get hiscores from txt file
-    public static ArrayList<String> GetHiscores(){
+    public static ArrayList<String> GetHiscores(Context context){
         ArrayList<String> list=new ArrayList<>();
 
         try {
-            String temp;
-            File sdcard = Environment.getExternalStorageDirectory();
-            Scanner file = new Scanner(new File(sdcard, "hiscores.txt"));
-            //Scanner file=new Scanner(new File("D:\\cs554\\havlicek-cs454t4\\hiscores.txt"));
-            while (file.hasNextLine()) {
-                temp = file.nextLine().toUpperCase();
-                list.add(temp);
+            InputStream fstream = context.getResources().openRawResource(
+                    context.getResources().getIdentifier("hiscores", "raw", context.getPackageName()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String strLine;
 
+            while ((strLine = br.readLine()) != null) {
+                // Print the content on the console
+                list.add(strLine);
             }
+            br.close();
+
             sortByValue(list);
             return list;
         }catch (Exception e){
@@ -38,8 +45,8 @@ public class PlayerInfoHelper {
     }
 
     //check if player reaches a new high score
-    public static Boolean isNewScore(Integer score){
-        ArrayList<String> list= GetHiscores();
+    public static Boolean isNewScore(Integer score, Context context){
+        ArrayList<String> list= GetHiscores(context);
         for(int i=0;i<list.size();i++)
         {
             int temp =Integer.parseInt(list.get(i).split(",")[1]);
@@ -52,9 +59,9 @@ public class PlayerInfoHelper {
     }
 
     //add new score to the hiscores
-    public static  ArrayList<String> addNewScore(Integer score)
+    public static ArrayList<String> addNewScore(Integer score, Context context)
     {
-        ArrayList<String> list= GetHiscores();
+        ArrayList<String> list= GetHiscores(context);
         //add score to list
         list.add(currentPlayerName+","+score.toString());
 
@@ -68,10 +75,10 @@ public class PlayerInfoHelper {
         list.remove(lowestIndex);
         try {
             //read file
-            String strLine;
-            File sdcard = Environment.getExternalStorageDirectory();
-            PrintWriter writer = new PrintWriter(new File(sdcard, "hiscores.txt"));
-            for(int i=0;i<list.size();i++)
+            PrintWriter writer = new PrintWriter(new File(PlayerInfoHelper.class.getResource("hiscore").getPath()));
+            int i = 0;
+            for(i=0; i<list.size();i++)
+                System.out.println("HI SCORE: " + list.get(i));
                 writer.println(list.get(i));
             writer.close();
 

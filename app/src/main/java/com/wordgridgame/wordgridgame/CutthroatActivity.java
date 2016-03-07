@@ -108,7 +108,7 @@ public class CutthroatActivity extends Activity {
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
                 if (ms < timeBlinkInMilliSeconds) {
-                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
+//                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
                 }
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
