@@ -54,6 +54,9 @@
         <activity
             android:name=".ShakerDemo"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+
+
         <activity
             android:name=".GameOnePlayerDoneActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
@@ -67,7 +70,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
+        <activity android:name=".BluetoothClientGameActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
     </application>
 
 </manifest>

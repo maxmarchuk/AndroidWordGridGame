@@ -385,7 +385,7 @@ public class SinglePlayerActivity extends Activity {
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
-                        btn.setTextSize(22.0f);
+                        btn.setTextSize(32.0f);
                         btn.setTypeface(null, Typeface.BOLD);
                         btn.setTag(i);
                         btn.setOnClickListener(new View.OnClickListener() {

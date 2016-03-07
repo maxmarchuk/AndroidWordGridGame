@@ -9,12 +9,14 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Created by lyf on 2016/2/21.
  */
 public class BluetoothConnectManager extends Thread {
-    private final BluetoothSocket mmSocket;
+    protected static BluetoothSocket mmSocket;
     private final InputStream mmInStream;
     private final OutputStream mmOutStream;
 
@@ -34,6 +36,23 @@ public class BluetoothConnectManager extends Thread {
         mmOutStream = tmpOut;
     }
 
+    public BluetoothConnectManager(){
+        InputStream tmpIn = null;
+        OutputStream tmpOut = null;
+
+        // Get the input and output streams, using temp objects because
+        // member streams are final
+        try {
+            tmpIn = mmSocket.getInputStream();
+            tmpOut = mmSocket.getOutputStream();
+        } catch (IOException e) { }
+
+        mmInStream = tmpIn;
+        mmOutStream = tmpOut;
+    }
+
+
+
     public void sendData(byte[] bytes) {
         try {
             mmOutStream.write(bytes);
@@ -52,6 +71,7 @@ public class BluetoothConnectManager extends Thread {
                 return buffer;
 
             } catch (IOException e) {
+                System.out.println(e.toString());
                 return null;
             }
         }
@@ -62,7 +82,6 @@ public class BluetoothConnectManager extends Thread {
             ObjectOutputStream oos = new ObjectOutputStream(mmOutStream);
             oos.writeObject(o);
             oos.flush();
-            oos.close();
         }catch (Exception ee){
             System.out.println("Serialization Save Error : "+ee.toString());
 
@@ -75,7 +94,8 @@ public class BluetoothConnectManager extends Thread {
             Object o=ois.readObject();
             return o;
 
-        }catch (Exception ee){return null;}
+        }catch (Exception ee){
+            return null;}
     }
 
     public byte[] serialize(Board board) throws IOException {

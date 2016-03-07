@@ -23,4 +23,16 @@
         android:id="@+id/btnJoin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/black1dpborder"
+        android:text="skip"
+        android:textColor="#80ffffff"
+        android:onClick="goToOnGameJoin"/>
+
+
 </RelativeLayout>

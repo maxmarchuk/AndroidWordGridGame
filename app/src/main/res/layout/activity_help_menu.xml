@@ -10,27 +10,43 @@
     android:background="@drawable/background"
     tools:context="com.wordgridgame.wordgridgame.HelpMenuActivity">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <TableLayout
+    android:id="@+id/backcontainer"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:background="#80465f7e"
+    android:paddingTop="10dp">
 
-        android:text="Back"
-        android:background="@drawable/shape"
-        android:textColor="@color/primary_text"
-        android:id="@+id/button"
+    <TableRow>
+    <Button
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@drawable/greybutton"
+        android:text="&#xf060;"
+        android:textStyle="bold"
+        android:textSize="35sp"
+        android:layout_weight="1"
+        android:textColor="#fff"
+        android:id="@+id/btnBack"
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:onClick="goToMainMenuActivity"/>
+    </TableRow>
+</TableLayout>
 
     <TextView
         android:id="@+id/txtBoggle"
         android:text="How to Play"
         android:textSize="50dp"
         android:padding="5dp"
+
         android:layout_margin="5dp"
         android:textColor="@color/accent"
-        android:layout_below="@id/button"
+        android:layout_below="@id/backcontainer"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
@@ -38,13 +54,8 @@
         android:layout_height="wrap_content"
         />
 
-<ScrollView
-    android:layout_below="@+id/txtBoggle"
-    android:id="@+id/scrollview"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical">
+
+
 
     <TextView
         android:width="200dp"
@@ -53,14 +64,16 @@
         android:text= "@string/str"
         android:textSize="18sp"
         android:textColor="@color/accent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="10dp"
         android:typeface="serif"
+        android:layout_below="@+id/txtBoggle"
         android:layout_centerHorizontal="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         />
 
-</ScrollView>
+
 </RelativeLayout>
+
+
 

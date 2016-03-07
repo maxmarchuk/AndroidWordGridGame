@@ -67,7 +67,8 @@ public class PlayerInfoHelper {
         }
         list.remove(lowestIndex);
         try {
-            //
+            //read file
+            String strLine;
             File sdcard = Environment.getExternalStorageDirectory();
             PrintWriter writer = new PrintWriter(new File(sdcard, "hiscores.txt"));
             for(int i=0;i<list.size();i++)

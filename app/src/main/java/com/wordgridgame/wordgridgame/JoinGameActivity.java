@@ -152,6 +152,7 @@ public class JoinGameActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //go to BluetoothClientGameActivity
                         Toast.makeText(getApplicationContext(), "Connected to server!",
                                 Toast.LENGTH_LONG).show();
 
@@ -166,20 +167,13 @@ public class JoinGameActivity extends Activity {
                 return;
             }
 
-            BluetoothConnectManager bluetoothConnectManager =  new BluetoothConnectManager(mmSocket);
-            final String message;
-            message = new String(bluetoothConnectManager.readData());
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            //set up connectManager and go to new Activity
+            BluetoothConnectManager.mmSocket=this.mmSocket;
 
-                }
-            });
+            Intent intent=new Intent(getApplicationContext(),BluetoothClientGameActivity.class);
+            startActivity(intent);
 
-            // Do work to manage the connection (in a separate thread)
-            //manageConnectedSocket(mmSocket);
         }
 
         /** Will cancel an in-progress connection, and close the socket */
@@ -189,5 +183,10 @@ public class JoinGameActivity extends Activity {
             } catch (IOException e) { }
         }
     }
+    public void goToOnGameJoin(View v){
+        Intent intent = new Intent (getApplicationContext(), BluetoothClientGameActivity.class);
+        startActivity(intent);
+    }
+
 
 }
