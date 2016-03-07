@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class BluetoothClientGameActivity extends Activity {
     Button btnDone;
     Button clearButton;
     ListView mainListView;
-    Button playerScoreTextView;
+    TextView playerScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
     HashMap<Integer, Integer> scoreMap;
@@ -96,7 +98,7 @@ public class BluetoothClientGameActivity extends Activity {
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         // Grab activity elements
-        playerScoreTextView = (Button) findViewById(R.id.txtPlayerScore);
+        playerScoreTextView = (TextView) findViewById(R.id.txtPlayer1Score);
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
