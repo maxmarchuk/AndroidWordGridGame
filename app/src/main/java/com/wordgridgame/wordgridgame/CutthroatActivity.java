@@ -1,6 +1,7 @@
 package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -46,6 +47,8 @@ public class CutthroatActivity extends Activity {
     ArrayList<Integer> buttonsClicked;
     long timeBlinkInMilliSeconds = 60 * 1000;
     protected static Activity basicTwoPlayerActivity;
+    Intent gameFinishIntent;
+
 
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
@@ -83,6 +86,8 @@ public class CutthroatActivity extends Activity {
         scoreMap.put(8, 11);
 
         initFonts();
+
+        gameFinishIntent =  new Intent(getBaseContext(), GameTwoPlayerDone.class);
     }
 
     @Override
@@ -332,19 +337,21 @@ public class CutthroatActivity extends Activity {
     public void goToPreviousActivity(View v){
         finish();
     }
-    private void gameEnded(){
-        int player1Score = Integer.parseInt(player1ScoreTextView.getText().toString());
-        int player2Score = Integer.parseInt(player2ScoreTextView.getText().toString());
+    private Integer getPlayer1Score() {
+        return Integer.parseInt(player1ScoreTextView.getText().toString());
+    }
 
-        if(player1Score == player2Score) {
-            Toast.makeText(CutthroatActivity.this, "Tie!", Toast.LENGTH_SHORT).show();
-        }  else if(player1Score > player2Score) {
-            Toast.makeText(CutthroatActivity.this, "Player 1 wins!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(CutthroatActivity.this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
-        }
-        finish();
+    private Integer getPlayer2Score() {
+        return Integer.parseInt(player2ScoreTextView.getText().toString());
+    }
+
+    private void gameEnded(){
+
+        gameFinishIntent.putExtra("player1Score", getPlayer1Score());
+        gameFinishIntent.putExtra("player2Score", getPlayer2Score());
+        gameFinishIntent.putExtra("foundWords", mNameList);
+        gameFinishIntent.putExtra("allWords", board.words);
+        startActivity(gameFinishIntent);
     }
     public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {

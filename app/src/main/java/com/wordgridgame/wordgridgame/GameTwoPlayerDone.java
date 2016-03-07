@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -72,5 +73,13 @@ public class GameTwoPlayerDone extends Activity {
 
         foundWordList.setAdapter(foundWordsAdapter);
         allWordList.setAdapter(allWordsAdapter);
+
+        if (player1Score.equals(player2Score)) {
+            Toast.makeText(GameTwoPlayerDone.this, "Tie!", Toast.LENGTH_LONG).show();
+        } else if (player1Score > player2Score) {
+            Toast.makeText(GameTwoPlayerDone.this, "Player 1 wins!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GameTwoPlayerDone.this, "Player 2 wins!", Toast.LENGTH_LONG).show();
+        }
     }
 }
