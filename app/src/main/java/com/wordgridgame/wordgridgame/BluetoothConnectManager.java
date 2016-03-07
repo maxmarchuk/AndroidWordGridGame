@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothSocket;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -11,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
 
 /**
  * Created by lyf on 2016/2/21.
@@ -116,4 +118,12 @@ public class BluetoothConnectManager extends Thread {
         }catch (Exception ee){
             return null;}
     }
+    public static byte[] intToBytes( final int i ) {
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(i);
+        return bb.array();
+    }
+
+
+
 }

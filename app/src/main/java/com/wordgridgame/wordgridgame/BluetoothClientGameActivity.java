@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.InputType;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -53,8 +56,9 @@ public class BluetoothClientGameActivity extends Activity {
 
         //initialize everything
         init();
-
-        new CountDownTimer(5 * 60000, 1000) {
+        new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
+        new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -73,6 +77,7 @@ public class BluetoothClientGameActivity extends Activity {
                 if (PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
+                gameEnded();
                 finish();
             }
         }.start();
@@ -139,7 +144,7 @@ public class BluetoothClientGameActivity extends Activity {
 
         //read board via bluetooth
         BluetoothConnectManager bcm=new BluetoothConnectManager();
-        Board board=(Board)bcm.readObject();
+        board=(Board)bcm.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
             {
@@ -154,7 +159,7 @@ public class BluetoothClientGameActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -187,6 +192,125 @@ public class BluetoothClientGameActivity extends Activity {
         initFonts();
 
     }
+
+    private void gameEnded(){
+        BluetoothConnectManager bcm=new BluetoothConnectManager();
+        Integer hostScore= Integer.parseInt(new String(bcm.readData()));
+        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        bcm.sendData(currentScore.toString().getBytes());
+
+        if(hostScore>currentScore){
+            Toast.makeText(getApplicationContext(), "Host Wins!!!", Toast.LENGTH_SHORT).show();
+        }else if(currentScore>hostScore){
+            Toast.makeText(getApplicationContext(), "Client Wins", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "Tie!!!", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+    }
+
+    private boolean isValidPick(int index) {
+        ArrayList<Integer> validIndices;
+        if (buttonsClicked.isEmpty()) {
+            return true;
+        }
+        if (buttonsClicked.contains(index)) {
+            return false;
+        }
+        switch (index % 4) {
+            case 0:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 4, index - 3, index + 1, index + 4, index + 5));
+                break;
+            case 1:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 3, index - 1, index + 1, index + 3, index + 4, index + 5));
+                break;
+            case 2:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 3, index - 1, index + 1, index + 3, index + 4, index + 5));
+                break;
+            case 3:
+                validIndices = new ArrayList<Integer>(Arrays.asList(index - 5, index - 4, index - 1, index + 3, index + 4));
+                break;
+            default:
+                validIndices = new ArrayList<>();
+                System.out.println("SHOULD NOT BE HERE");
+        }
+        if (validIndices.contains(buttonsClicked.get(buttonsClicked.size() - 1))) {
+            return true;
+        }
+        return false;
+    }
+
+    public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            board.getWords();
+            return null;
+        }
+    }
+
+    public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            //hc = new HillClimber(getApplicationContext());
+            //board = hc.climb();
+            adaptBoardToCharList();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //Set the gridview's data to new list of letters
+                    letterGrid = (GridLayout) findViewById(R.id.gridLayout);
+
+                    for (int i = 0; i < 16; i++) {
+                        final Button btn = (Button) letterGrid.getChildAt(i);
+                        btn.setText(letters.get(i));
+                        btn.setText(letters.get(i));
+                        btn.setTextSize(32.0f);
+                        btn.setTypeface(null, Typeface.BOLD);
+                        btn.setTag(i);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Integer buttonIndex = (Integer) v.getTag();
+
+                                // If the button is clicked again, attempt to submit the word.
+                                if ((buttonsClicked.size() > 0) && (buttonsClicked.get(buttonsClicked.size() - 1) == buttonIndex)) {
+                                    String submittedWord = currentWordText.getText().toString();
+                                    boolean validWord = valid(submittedWord);
+
+                                    if (validWord) {
+                                        addWord(submittedWord);
+                                        resetGrid();
+                                    }
+                                    return;
+                                }
+
+                                // If the button is a valid button click (direct neighbor of last button clicked)
+                                if (isValidPick(buttonIndex)) {
+                                    v.setBackgroundResource(R.drawable.shape);
+                                    currentWordText.append(btn.getText());
+                                    buttonsClicked.add(buttonIndex);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            return null;
+        }
+    }
+
+    public void onDoneButtonClick(View v) {
+        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        if (PlayerInfoHelper.isNewScore(currentScore)) {
+            usernameBuilder.show();
+        }
+        finish();
+    }
+
+
     private void initFonts() {
         FontManager fm = new FontManager();
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));

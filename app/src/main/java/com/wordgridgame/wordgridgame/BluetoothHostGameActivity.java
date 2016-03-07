@@ -32,8 +32,10 @@ public class BluetoothHostGameActivity extends Activity {
     //bluetooth stuff
     public static int REQUEST_BLUETOOTH = 1;
     BluetoothAdapter BTAdapter;
+    BluetoothConnectManager hostConnectManager;
 
     //gameplay stuff
+    CountDownTimer gameTimer;
     GridLayout letterGrid;
     Button btnBackToMenu;
     Button btnDone;
@@ -63,13 +65,14 @@ public class BluetoothHostGameActivity extends Activity {
         init();
         initBluetooth();
         new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
 
-        new CountDownTimer(5 * 60000, 1000) {
+        gameTimer= new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
                 if (ms < timeBlinkInMilliSeconds) {
-                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
+                   // timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
                 }
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
@@ -77,15 +80,18 @@ public class BluetoothHostGameActivity extends Activity {
                 timerText.setText(text);
             }
 
+
+
             public void onFinish() {
                 timerText.setText("Done");
                 Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
                 if (PlayerInfoHelper.isNewScore(currentScore)) {
                     usernameBuilder.show();
                 }
+                gameEnded();
                 finish();
             }
-        }.start();
+        };
         // On clicking clear button, empty the current word
         clearButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -96,6 +102,23 @@ public class BluetoothHostGameActivity extends Activity {
                 }
         );
     }
+
+    private void gameEnded() {
+        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        hostConnectManager.sendData(currentScore.toString().getBytes());
+        Integer clientScore=   Integer.parseInt(new String(hostConnectManager.readData()));
+
+        if(currentScore>clientScore){
+            Toast.makeText(getApplicationContext(), "Host Wins!!!", Toast.LENGTH_SHORT).show();
+        }else if(clientScore>currentScore){
+            Toast.makeText(getApplicationContext(), "Client Wins", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "Tie!!!", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         // Grab activity elements
@@ -291,6 +314,13 @@ public class BluetoothHostGameActivity extends Activity {
         finish();
     }
 
+    public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            board.getWords();
+            return null;
+        }
+    }
+
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -398,11 +428,20 @@ public class BluetoothHostGameActivity extends Activity {
                         }
                     });
                     BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
+                    hostConnectManager=bluetoothConnectManager;
                     //send board
                     bluetoothConnectManager.sendObject(board);
+                    for(int i=0;i<4;i++){
+                        for(int j=0;j<4;j++)
+                        {
+                            System.out.print(board.board[i][j].letter);
+                        }
+                        System.out.println();
+                    }
                     String returnMsg=new String(bluetoothConnectManager.readData());
                     if(returnMsg.startsWith("Board received"))
                         bluetoothConnectManager.sendData("Hey what's up client".getBytes());
+                    gameTimer.start();
 
                     try {
                         mmServerSocket.close();
