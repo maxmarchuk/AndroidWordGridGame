@@ -91,21 +91,21 @@ public class SinglePlayerActivity extends Activity {
             @Override
             //addnewscore if reached a new high score
             public void onClick(DialogInterface dialog, int which) {
-                Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+                Integer currentScore = getCurrentScore();
                 if (input.getText().length() == 0) {
                     PlayerInfoHelper.currentPlayerName = "Unknown";
                 } else {
                     PlayerInfoHelper.currentPlayerName = input.getText().toString();
                 }
                 PlayerInfoHelper.addNewScore(currentScore);
-
-
+                goToDoneActivity();
             }
         });
         usernameBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                goToDoneActivity();
             }
         });
 
@@ -198,7 +198,7 @@ public class SinglePlayerActivity extends Activity {
     }
 
     private void addWord(String word) {
-        int currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        int currentScore = getCurrentScore();
         int length = word.length();
 
         if (length <= 8) {
@@ -223,17 +223,21 @@ public class SinglePlayerActivity extends Activity {
 
     private void finishGame(){
         timerText.setText("-:--");
-        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        Integer currentScore = getCurrentScore();
 
         if (PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();
+        } else {
+            goToDoneActivity();
         }
+    }
+
+    private void goToDoneActivity() {
         // Add the data to the finish game activity
-        gameFinishIntent.putExtra("score", 2);
+        gameFinishIntent.putExtra("score", getCurrentScore());
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
         startActivity(gameFinishIntent);
-
     }
 
     private void resetGridCellColors() {
@@ -298,7 +302,7 @@ public class SinglePlayerActivity extends Activity {
     }
 
     public void onDoneButtonClick(View v) {
-        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        Integer currentScore = getCurrentScore();
         if (PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();
         }
@@ -433,5 +437,9 @@ public class SinglePlayerActivity extends Activity {
             board.getWords();
             return null;
         }
+    }
+
+    public Integer getCurrentScore() {
+        return Integer.parseInt(playerScoreTextView.getText().toString());
     }
 }
