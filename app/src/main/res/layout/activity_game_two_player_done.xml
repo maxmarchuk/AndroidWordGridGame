@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.wordgridgame.wordgridgame.GameTwoPlayerDone"
+    android:background="@drawable/background">
+    <TableLayout android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:background="#80465f7e"
+            >
+            <Button android:id="@+id/btnMainMenu"
+                android:layout_margin="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/greybutton"
+                android:text="&#xf00d;"
+                android:textStyle="bold"
+                android:textSize="35dp"
+                android:textColor="#fff"
+                android:onClick="goToMainMenuActivity"
+                >
+            </Button>
+        </TableRow>
+    </TableLayout>
+
+    <TableRow
+        android:id="@+id/containerGameStatus"
+        android:layout_below="@+id/topBar"
+        android:gravity="center"
+        android:foregroundGravity="center"
+        android:layout_marginTop="10dp"
+        android:background="#80465f7e"
+        android:layout_height="75dp"
+        android:minHeight="100dp"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:gravity="center"
+            android:text="P1: "
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:textSize="50dp"/>
+        <TextView
+            android:id="@+id/txtPlayer1Score"
+            android:gravity="center"
+            android:text="0"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:textSize="50dp"/>
+
+        <TextView
+            android:gravity="center"
+            android:text="P2: "
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:textSize="50dp"/>
+        <TextView
+            android:id="@+id/txtPlayer2Score"
+            android:gravity="center"
+            android:text="0"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:textSize="50dp"/>
+    </TableRow>
+
+    <LinearLayout
+        android:id="@+id/containerListLabel"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:layout_below="@+id/containerGameStatus"
+        android:background="#80465f7e"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:text="Words Found"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dip"
+            android:textColor="#fff"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:text="Possible Words"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/containerListLabel"
+        android:background="#80465f7e"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/listFoundWords"
+            android:layout_height="match_parent"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            >
+        </ListView>
+        <ListView
+            android:id="@+id/listAllWords"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            >
+
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout>

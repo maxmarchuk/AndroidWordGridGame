@@ -13,8 +13,7 @@
         android:background="#80465f7e"
         >
         <Button android:id="@+id/btnMainMenu"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_margin="5dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/greybutton"
@@ -47,7 +46,7 @@
             android:textSize="50dp"/>
         <TextView
             android:id="@+id/txtScore"
-            android:gravity="left"
+            android:gravity="center"
             android:text="0"
             android:layout_weight="1"
             android:textColor="#fff"
@@ -88,7 +87,7 @@
                 android:layout_below="@+id/containerListLabel"
                 android:background="#80465f7e"
                 android:layout_width="match_parent"
-                android:layout_height="300dp">
+                android:layout_height="match_parent">
                 <ListView
                     android:id="@+id/listFoundWords"
                     android:layout_height="match_parent"
