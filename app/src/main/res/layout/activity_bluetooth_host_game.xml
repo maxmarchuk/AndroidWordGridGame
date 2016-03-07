@@ -18,7 +18,7 @@
         android:background="#80465f7e"
         android:paddingTop="10dp">
 
-        <TableRow>
+        <TableRow android:gravity="">
             <Button android:id="@+id/btnBack"
 
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/greybutton"
 
-                android:text="0"
+                android:text="0:00"
                 android:textColor="#fff"
                 android:textSize="20dp"
                 />

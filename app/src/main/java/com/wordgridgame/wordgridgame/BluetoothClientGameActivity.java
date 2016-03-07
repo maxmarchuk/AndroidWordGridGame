@@ -387,7 +387,6 @@ public class BluetoothClientGameActivity extends Activity {
     public void goToPreviousActivity(View v){
         finish();
     }
-
 }
 
 
