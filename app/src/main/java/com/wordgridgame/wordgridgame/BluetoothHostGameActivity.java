@@ -53,6 +53,7 @@ public class BluetoothHostGameActivity extends Activity {
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
     long timeBlinkInMilliSeconds = 60 * 1000;
+    Integer currentScore;
     protected static Activity BluetoothHostGameActivity;
 
     @Override
@@ -84,10 +85,7 @@ public class BluetoothHostGameActivity extends Activity {
 
             public void onFinish() {
                 timerText.setText("Done");
-                Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-                if (PlayerInfoHelper.isNewScore(currentScore)) {
-                    usernameBuilder.show();
-                }
+                currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
                 gameEnded();
                 finish();
             }
@@ -104,7 +102,7 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private void gameEnded() {
-        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
         hostConnectManager.sendData(currentScore.toString().getBytes());
         Integer clientScore=   Integer.parseInt(new String(hostConnectManager.readData()));
 
