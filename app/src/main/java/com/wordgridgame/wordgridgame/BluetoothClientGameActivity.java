@@ -32,6 +32,7 @@ public class BluetoothClientGameActivity extends Activity {
     //bluetooth stuff
     public static int REQUEST_BLUETOOTH = 1;
     BluetoothAdapter BTAdapter;
+    BluetoothConnectManager clientConnectManager;
 
     //gameplay stuff
     GridLayout letterGrid;
@@ -39,7 +40,8 @@ public class BluetoothClientGameActivity extends Activity {
     Button btnDone;
     Button clearButton;
     ListView mainListView;
-    TextView playerScoreTextView;
+    TextView player1ScoreTextView;
+    TextView player2ScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
     HashMap<Integer, Integer> scoreMap;
@@ -54,17 +56,18 @@ public class BluetoothClientGameActivity extends Activity {
     Integer currentScore=0;
     protected static Activity BluetoothClientGameActivity;
     Intent gameFinishIntent;
+    boolean gameDone = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_client_game);
-
+        BluetoothClientGameActivity = this;
         //initialize everything
         init();
         new BackgroundGridTask().execute();
-        new GenerateWordListTask().execute();
+//        new GenerateWordListTask().execute();
         new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -80,7 +83,7 @@ public class BluetoothClientGameActivity extends Activity {
 
             public void onFinish() {
                 timerText.setText("Done");
-                currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+                currentScore = getPlayer2Score();
                 gameEnded();
             }
         }.start();
@@ -99,7 +102,8 @@ public class BluetoothClientGameActivity extends Activity {
     private void init() {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         // Grab activity elements
-        playerScoreTextView = (TextView) findViewById(R.id.txtPlayer2Score);
+        player1ScoreTextView = (TextView) findViewById(R.id.txtPlayer1Score);
+        player2ScoreTextView = (TextView) findViewById(R.id.txtPlayer2Score);
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
@@ -115,6 +119,7 @@ public class BluetoothClientGameActivity extends Activity {
 
         //read board via bluetooth
         BluetoothConnectManager bcm=new BluetoothConnectManager();
+        clientConnectManager = bcm;
         board=(Board)bcm.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
@@ -123,31 +128,6 @@ public class BluetoothClientGameActivity extends Activity {
             }
             System.out.println();
         }
-        bcm.sendData("Board received".getBytes());
-        final String message;
-        message = new String(bcm.readData());
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        //read/send scores via bluetooth
-
-
-
-
-
-        //timer via bluetooth
-
-
-
-
-
-
 
         // Populate the score mapping
         // *Key*: Word Length
@@ -164,14 +144,42 @@ public class BluetoothClientGameActivity extends Activity {
         gameFinishIntent =  new Intent(getBaseContext(), GameTwoPlayerDone.class);
 
     }
+    public class BluetoothListenerTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            while(!gameDone) {
+                Object tempObj;
+                tempObj = clientConnectManager.readObject();
 
+                try{
+                    final Integer newScore = (Integer) tempObj;
+                    if(newScore != null) {
+                        BluetoothClientGameActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setHostScore(newScore);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    System.out.println("Object not an integer: " + e.getMessage());
+                }
+
+            }
+            return null;
+        }
+    }
+
+    private void setHostScore(Integer newScore){
+        System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
+        player1ScoreTextView.setText(newScore.toString());
+    }
     private void gameEnded(){
-        BluetoothConnectManager bcm=new BluetoothConnectManager();
+        gameDone = true;
+        clientConnectManager.close();
 
-        currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-        bcm.sendObject(currentScore);
+        currentScore = getPlayer2Score();
 
-        Integer hostScore = (Integer) bcm.readObject();
+        Integer hostScore = getPlayer1Score();
         gameFinishIntent.putExtra("player1Score", hostScore);
         gameFinishIntent.putExtra("player2Score", currentScore);
         gameFinishIntent.putExtra("foundWords", mNameList);
@@ -179,6 +187,13 @@ public class BluetoothClientGameActivity extends Activity {
         startActivity(gameFinishIntent);
 
         finish();
+    }
+    private Integer getPlayer2Score(){
+        return Integer.parseInt(player2ScoreTextView.getText().toString());
+    }
+
+    private Integer getPlayer1Score(){
+        return Integer.parseInt(player1ScoreTextView.getText().toString());
     }
 
     private boolean isValidPick(int index) {
@@ -265,6 +280,7 @@ public class BluetoothClientGameActivity extends Activity {
                             }
                         });
                     }
+                    new BluetoothListenerTask().execute();
                 }
             });
             return null;
@@ -272,7 +288,7 @@ public class BluetoothClientGameActivity extends Activity {
     }
 
     public void onDoneButtonClick(View v) {
-        Integer currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        Integer currentScore = getPlayer2Score();
         if (PlayerInfoHelper.isNewScore(currentScore)) {
             usernameBuilder.show();
         }
@@ -317,26 +333,33 @@ public class BluetoothClientGameActivity extends Activity {
 
     //requires getting score from server
     private void addWord(String word){
-        int currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
+        int currentScore = getPlayer2Score();
         int length = word.length();
 
         if (length <= 8) {
             currentScore += scoreMap.get(length);
-            playerScoreTextView.setText(String.valueOf(currentScore));
+            player2ScoreTextView.setText(String.valueOf(currentScore));
+            sendNewClientScore(currentScore);
         } else {
             currentScore += 11;
-            playerScoreTextView.setText(String.valueOf(currentScore));
+            player2ScoreTextView.setText(String.valueOf(currentScore));
+            sendNewClientScore(currentScore);
         }
 
         if (isInDictionary(word)) {
             mNameList.add(word);
             mArrayAdapter.notifyDataSetChanged();
+
             return;
         } else {
             Toast.makeText(getApplicationContext(), "Invalid word!", Toast.LENGTH_SHORT).show();
             resetGrid();
             return;
         }
+    }
+    private void sendNewClientScore(Integer newScore) {
+        System.out.println("!!! SENDING SCORE: " + newScore);
+        clientConnectManager.sendObject(newScore);
     }
 
     private void resetGridCellColors() {

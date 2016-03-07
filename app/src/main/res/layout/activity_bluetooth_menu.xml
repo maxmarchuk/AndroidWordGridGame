@@ -46,32 +46,35 @@
         </TableRow>
 
 
-        <TableRow
+        <LinearLayout
             android:gravity="center"
             android:id="@+id/creategamecontainer"
             android:layout_alignStart="@+id/textView2"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent">
 
             <Button
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Cutthroat Mode"
                 android:id="@+id/btnCutthroat"
+                android:layout_weight="1"
                 android:onClick="CreateGame"
                 android:background="@drawable/shape"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"/>
 
             <Button
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Basic Mode"
                 android:id="@+id/btnBasic"
+                android:layout_weight="1"
                 android:onClick="CreateGame"
                 android:background="@drawable/shape"
                 android:layout_marginRight="10dp"
                 />
-        </TableRow>
+        </LinearLayout>
 
         <TableRow
             android:layout_below="@+id/creategamecontainer"

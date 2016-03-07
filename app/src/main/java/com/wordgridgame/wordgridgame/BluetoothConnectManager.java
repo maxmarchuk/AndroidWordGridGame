@@ -124,6 +124,9 @@ public class BluetoothConnectManager extends Thread {
         return bb.array();
     }
 
+    public void close() {
+        try{mmSocket.close();} catch(Exception e){}
+    }
 
 
 }

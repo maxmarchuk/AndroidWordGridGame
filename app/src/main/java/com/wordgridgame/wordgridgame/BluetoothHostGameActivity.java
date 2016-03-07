@@ -44,6 +44,7 @@ public class BluetoothHostGameActivity extends Activity {
     Button clearButton;
     ListView mainListView;
     TextView playerScoreTextView;
+    TextView player2ScoreTextView;
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList;
     HashMap<Integer, Integer> scoreMap;
@@ -58,6 +59,7 @@ public class BluetoothHostGameActivity extends Activity {
     Integer currentScore;
     protected static Activity BluetoothHostGameActivity;
     Intent gameFinishIntent;
+    boolean gameDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class BluetoothHostGameActivity extends Activity {
         init();
         initBluetooth();
         new BackgroundGridTask().execute();
-        new GenerateWordListTask().execute();
+//        new GenerateWordListTask().execute();
 
         gameTimer= new CountDownTimer(15000, 1000) {
 
@@ -104,13 +106,15 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private void gameEnded() {
+        gameDone = true;
+        hostConnectManager.close();
         currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-        hostConnectManager.sendObject(currentScore);
+//        hostConnectManager.sendObject(currentScore);
 
-        Integer clientScore = (Integer) hostConnectManager.readObject();
+//        Integer clientScore = (Integer) hostConnectManager.readObject();
 
         gameFinishIntent.putExtra("player1Score", currentScore);
-        gameFinishIntent.putExtra("player2Score", clientScore);
+        gameFinishIntent.putExtra("player2Score", Integer.valueOf(player2ScoreTextView.getText().toString()));
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
         startActivity(gameFinishIntent);
@@ -122,6 +126,7 @@ public class BluetoothHostGameActivity extends Activity {
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         // Grab activity elements
         playerScoreTextView = (TextView) findViewById(R.id.txtPlayer1Score);
+        player2ScoreTextView = (TextView) findViewById(R.id.txtPlayer2Score);
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
@@ -228,9 +233,11 @@ public class BluetoothHostGameActivity extends Activity {
         if (length <= 8) {
             currentScore += scoreMap.get(length);
             playerScoreTextView.setText(String.valueOf(currentScore));
+            sendNewHostScore(currentScore);
         } else {
             currentScore += 11;
             playerScoreTextView.setText(String.valueOf(currentScore));
+            sendNewHostScore(currentScore);
         }
 
         if (isInDictionary(word)) {
@@ -243,6 +250,11 @@ public class BluetoothHostGameActivity extends Activity {
             return;
         }
 
+    }
+
+    private void sendNewHostScore(Integer newScore) {
+        System.out.println("!!! SENDING SCORE: " + newScore);
+        hostConnectManager.sendObject(newScore);
     }
 
     private void resetGridCellColors() {
@@ -322,11 +334,42 @@ public class BluetoothHostGameActivity extends Activity {
         }
     }
 
+    public class BluetoothListenerTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            while(!gameDone) {
+                Object tempObj;
+                tempObj = hostConnectManager.readObject();
+
+                try{
+                    final Integer newScore = (Integer) tempObj;
+                    if(newScore != null) {
+                        BluetoothHostGameActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setClientScore(newScore);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    System.out.println("Object not an integer");
+                }
+
+            }
+            return null;
+        }
+    }
+
+    private void setClientScore(Integer newScore){
+        System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
+        player2ScoreTextView.setText(newScore.toString());
+    }
+
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             hc = new HillClimber(getApplicationContext());
             board = hc.climb();
+            board.getWords();
             adaptBoardToCharList();
 
             BluetoothHostGameActivity.runOnUiThread(new Runnable() {
@@ -425,11 +468,11 @@ public class BluetoothHostGameActivity extends Activity {
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Connection with other player successful", Toast.LENGTH_SHORT).show();
                             currentWordText.setText("");
-
                         }
                     });
                     BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
                     hostConnectManager=bluetoothConnectManager;
+                    new BluetoothListenerTask().execute();
                     //send board
                     bluetoothConnectManager.sendObject(board);
 
@@ -440,10 +483,14 @@ public class BluetoothHostGameActivity extends Activity {
                         }
                         System.out.println();
                     }
-                    String returnMsg=new String(bluetoothConnectManager.readData());
-                    if(returnMsg.startsWith("Board received"))
-                        bluetoothConnectManager.sendData("Hey what's up client".getBytes());
+
                     gameTimer.start();
+                    BluetoothHostGameActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            currentWordText.setText("");
+                        }
+                    });
 
                     try {
                         mmServerSocket.close();
