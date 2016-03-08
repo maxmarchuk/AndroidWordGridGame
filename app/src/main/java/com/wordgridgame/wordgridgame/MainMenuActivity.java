@@ -25,7 +25,13 @@ public class MainMenuActivity extends Activity {
     }
 
     public void goToHelpMenuActivity(View view){
-        Intent intent=new Intent(getApplicationContext(),HelpMenuActivity.class);
+        Intent intent=new Intent(getApplicationContext(),WaitingForOpponentDialog.class);
+        ///Intent intent=new Intent(getApplicationContext(),HelpMenuActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToWaitingActivity(View view){
+        Intent intent=new Intent(getApplicationContext(),WaitingForOpponentDialog.class);
         startActivity(intent);
     }
 }

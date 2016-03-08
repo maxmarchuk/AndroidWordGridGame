@@ -40,7 +40,6 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/greybutton"
-
                 android:text="0:00"
                 android:textColor="#fff"
                 android:textSize="20dp"

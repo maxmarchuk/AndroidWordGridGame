@@ -76,34 +76,32 @@ public class MultiroundHostActivity extends Activity {
         startGame();
     }
 
-    private void startGame(){
-        while(true) {
-            if (gameNumber == null)
-                gameNumber = 0;
+    private void startGame() {
+        if (gameNumber == null)
+            gameNumber = 0;
 
-            new BackgroundGridTask().execute();
-            if (gameNumber == 0) {
-                if (!isClentConnected) {//show some dialog and wait
-                    // }
-                }
-
-            } else {
-                if (!isClientDone && !isHostDone) {
-                    //wait
-                }
-
-
+        new BackgroundGridTask().execute();
+        if (gameNumber == 0) {
+            if (!isClentConnected) {//show some dialog and wait
+                // }
             }
-            sendBoard();
-            gameTimer.start();
-            currentScore=0;
-            mNameList.clear();
 
+        } else {
+            if (!isClientDone && !isHostDone) {
+                //wait
+            }
 
 
         }
+        sendBoard();
+        gameTimer.start();
+        currentScore = 0;
+        mNameList.clear();
+
 
     }
+
+
 
 
     // assign the global character array representation of the generated letter board
@@ -280,6 +278,17 @@ public class MultiroundHostActivity extends Activity {
 
     private void init() {
 
+        btnDone.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isHostDone=true;
+                        hostConnectManager.sendObject(isHostDone);
+                    }
+                }
+        );
+
+
         gameTimer= new CountDownTimer(1 * 60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -398,7 +407,7 @@ public class MultiroundHostActivity extends Activity {
         gameNumber++;
         currentTime= timerText.getText().toString();
         gameTimer.cancel();
-
+        startGame();
     }
 
     private void addScoreToTime()

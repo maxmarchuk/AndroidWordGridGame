@@ -38,17 +38,20 @@
     </style>
 
     <style name="blinkText" parent="AppTheme.NoActionBar">
-    <item name="android:textStyle">bold</item>
-    <item name="android:textColor">#FF0000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FF0000</item>
     </style>
+
     <style name="AppTheme2" parent="AppTheme">
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
     </style>
+
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
 
     </style>
+
     <style name="RobotoButtonStyle" parent="android:Widget.Button">
         <item name="android:fontFamily">sans-serif-light</item>
 
