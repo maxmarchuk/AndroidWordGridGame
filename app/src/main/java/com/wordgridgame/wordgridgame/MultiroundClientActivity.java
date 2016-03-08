@@ -160,7 +160,6 @@ public class MultiroundClientActivity extends Activity {
                             System.out.println("Received an unkown string from host: " + message);
                         }
                     }
-
                 } catch (Exception e) {
 
                 }
@@ -180,6 +179,20 @@ public class MultiroundClientActivity extends Activity {
         HOST_DONE = true;
         Toast.makeText(MultiroundClientActivity.this, "Opponent has finished their round.", Toast.LENGTH_SHORT).show();
 
+    }
+    private void roundDone() {
+        int currentTimeInMillis = getMillisFromTimeString(timerText.getText().toString());
+        timeLeftInMillis = ((currentScore * 1000) + currentTimeInMillis);
+        timer.cancel();
+    }
+
+    // Takes time in format of 01:23
+    // returns (60 + 23) * 1000
+    public Integer getMillisFromTimeString(String time) {
+        String[] units = time.split(":"); //will break the string up into an array
+        int minutes = Integer.parseInt(units[0]); //first element
+        int seconds = Integer.parseInt(units[1]); //second element
+        return ((60 * minutes + seconds) * 1000); //add up our values
     }
 
     private void getBoardFromHost(){
