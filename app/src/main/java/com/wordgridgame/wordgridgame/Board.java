@@ -17,7 +17,7 @@ import static java.lang.System.out;
 public class Board  implements Serializable {
     private static final long serialVersionUID = 7863262235394607247L;
     public Letter[][] board;
-    private ArrayList<String> dict=new ArrayList<String>();
+    public ArrayList<String> dict=new ArrayList<String>();
     public ArrayList<String> words=new ArrayList<String>();
 
     class Letter implements Serializable{
@@ -131,12 +131,11 @@ public class Board  implements Serializable {
     //return current words
     public ArrayList<String> getWords(){
         words.clear();
-        words = dict;
-//        for(int i=0;i<4;i++){
-//            for(int j=0;j<4;j++){
-////                board[i][j].traverse("");
-//            }
-//        }
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                board[i][j].traverse("");
+            }
+        }
 
         return words;
     }

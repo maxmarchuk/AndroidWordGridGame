@@ -74,9 +74,9 @@ public class BluetoothHostGameActivity extends Activity {
         init();
         initBluetooth();
         new BackgroundGridTask().execute();
-//        new GenerateWordListTask().execute();
+        new GenerateWordListTask().execute();
 
-        gameTimer= new CountDownTimer(15000, 1000) {
+        gameTimer= new CountDownTimer(1 * 30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -121,8 +121,6 @@ public class BluetoothHostGameActivity extends Activity {
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
         startActivity(gameFinishIntent);
-
-        finish();
     }
 
     private void init() {
@@ -307,7 +305,7 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private boolean isInDictionary(String word) {
-        return board.words.contains(word);
+        return board.dict.contains(word);
     }
 
     private boolean isValidPick(int index) {
@@ -409,7 +407,7 @@ public class BluetoothHostGameActivity extends Activity {
         protected Void doInBackground(Void... params) {
             hc = new HillClimber(getApplicationContext());
             board = hc.climb();
-            board.getWords();
+//            board.getWords();
             adaptBoardToCharList();
 
             BluetoothHostGameActivity.runOnUiThread(new Runnable() {

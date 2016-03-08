@@ -70,7 +70,7 @@ public class BluetoothClientGameActivity extends Activity {
         //initialize everything
         init();
         new BackgroundGridTask().execute();
-        new CountDownTimer(15000, 1000) {
+        new CountDownTimer(1* 30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -124,6 +124,7 @@ public class BluetoothClientGameActivity extends Activity {
         BluetoothConnectManager bcm=new BluetoothConnectManager();
         clientConnectManager = bcm;
         board=(Board)bcm.readObject();
+        new GenerateWordListTask().execute();
         gameType = (String)bcm.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
@@ -213,8 +214,6 @@ public class BluetoothClientGameActivity extends Activity {
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
         startActivity(gameFinishIntent);
-
-        finish();
     }
     private Integer getPlayer2Score(){
         return Integer.parseInt(player2ScoreTextView.getText().toString());
@@ -257,7 +256,7 @@ public class BluetoothClientGameActivity extends Activity {
 
     public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
-//            board.getWords();
+            board.getWords();
             return null;
         }
     }
@@ -426,7 +425,7 @@ public class BluetoothClientGameActivity extends Activity {
     }
 
     private boolean isInDictionary(String word) {
-        return board.words.contains(word);
+        return board.dict.contains(word);
     }
 
 

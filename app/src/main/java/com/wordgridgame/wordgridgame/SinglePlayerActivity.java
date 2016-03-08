@@ -229,7 +229,6 @@ public class SinglePlayerActivity extends Activity {
             usernameBuilder.show();
         } else {
             goToDoneActivity();
-            finish();
         }
     }
 
@@ -268,7 +267,7 @@ public class SinglePlayerActivity extends Activity {
     }
 
     private boolean isInDictionary(String word) {
-        return board.words.contains(word);
+        return board.dict.contains(word);
     }
 
     private boolean isValidPick(int index) {
@@ -307,27 +306,6 @@ public class SinglePlayerActivity extends Activity {
         if (PlayerInfoHelper.isNewScore(currentScore, getApplicationContext())) {
             usernameBuilder.show();
         }
-        finish();
-    }
-
-    public void onShowWordsButtonClick(View v) {
-        foundAndAllWords = new AlertDialog.Builder(this);
-        foundAndAllWords.setTitle("Found Words");
-        List<Object> underlyingWordList = new ArrayList<>();
-        for (int i = 0; i < mArrayAdapter.getCount(); i++) {
-            underlyingWordList.add(mArrayAdapter.getItem(i));
-        }
-        int count = board.words.size();
-        Toast.makeText(getApplicationContext(), "count is" + count, Toast.LENGTH_SHORT);
-
-        final CharSequence[] words = underlyingWordList.toArray(new String[underlyingWordList.size()]);
-        foundAndAllWords.setItems(words, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                String selectedText = words[item].toString();  //Selected item in listview
-            }
-        });
-        AlertDialog alertDialogObject = foundAndAllWords.create();
-        alertDialogObject.show();
     }
 
     @Override

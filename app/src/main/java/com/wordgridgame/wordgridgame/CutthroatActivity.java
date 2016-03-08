@@ -108,7 +108,6 @@ public class CutthroatActivity extends Activity {
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
                 if (ms < timeBlinkInMilliSeconds) {
-//                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
                 }
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
@@ -118,7 +117,6 @@ public class CutthroatActivity extends Activity {
 
             public void onFinish() {
                 timerText.setText("Done");
-
                 gameEnded();
             }
         }.start();
@@ -228,7 +226,7 @@ public class CutthroatActivity extends Activity {
     }
 
     private boolean isInDictionary(String word) {
-        return board.words.contains(word);
+        return board.dict.contains(word);
     }
 
     private boolean isValidPick(int index) {
