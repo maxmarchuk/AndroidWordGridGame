@@ -94,32 +94,23 @@
                 android:textColor="#fff"
                 android:textSize="20dp"
                 />
+            <Button
+                android:id="@+id/btnDone"
+                android:background="@drawable/greybutton"
+                android:text="&#xf04d;"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textSize="30sp"
+                android:textColor="#fff"
+                android:layout_marginEnd="10dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:onClick="onDoneButtonClick"
+                android:layout_weight="1"
+                />
         </TableRow>
     </TableLayout>
-        <Button
-            android:id="@+id/btnClear"
-            android:background="@drawable/greybutton"
-            android:text="&#xf021;"
-            android:textSize="35dp"
-            android:textColor="#fff"
-            android:layout_span="1"
-            android:layout_marginRight="5dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            />
-        <Button
-            android:id="@+id/btnDone"
-            android:background="@drawable/greybutton"
-            android:text="&#xf04d;"
-            android:textSize="30dp"
-            android:textColor="#fff"
-            android:layout_marginRight="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:onClick="onDoneButtonClick"
-            android:visibility="gone"
-            />
+
     </TableRow>
     </TableLayout>
     <TableLayout
@@ -179,7 +170,4 @@
                 />
         </TableRow>
     </TableLayout>
-
-
-
 </RelativeLayout>

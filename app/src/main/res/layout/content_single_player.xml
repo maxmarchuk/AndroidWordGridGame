@@ -8,6 +8,7 @@
     >
 
     <LinearLayout
+        android:id="@+id/scoreContainer"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="70dp"
@@ -126,9 +127,9 @@
 
         </GridLayout>
     </TableRow>
-    <TableRow
-        android:layout_margin="10dp"
-        android:gravity="center">
+    <TableRow android:gravity="center"
+        android:layout_marginTop="10dp"
+        >
         <ListView
             android:background="@drawable/black1dpborder"
             android:id="@+id/listSubmittedWords"

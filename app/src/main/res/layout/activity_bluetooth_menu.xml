@@ -56,7 +56,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Cutthroat Mode"
+                android:text="Cutthroat"
                 android:id="@+id/btnCutthroat"
                 android:layout_weight="1"
                 android:onClick="CreateCutthroatGame"
@@ -67,13 +67,24 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Basic Mode"
+                android:text="Basic"
                 android:id="@+id/btnBasic"
                 android:layout_weight="1"
                 android:onClick="CreateGame"
                 android:background="@drawable/shape"
                 android:layout_marginRight="10dp"
                 />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Multi Round"
+                android:id="@+id/btnMulti"
+                android:layout_weight="1"
+                android:onClick="CreateGame"
+                android:background="@drawable/shape"
+                android:layout_marginRight="10dp"
+                />
+
         </LinearLayout>
 
         <TableRow
@@ -89,18 +100,29 @@
                 />
         </TableRow>
 
-   <TableRow
-       android:gravity="center"
-       android:layout_marginTop="10dp">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_alignStart="@+id/textView2"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent">
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="Join Game"
         android:id="@+id/btnJoin"
+        android:layout_weight="1"
+        android:layout_marginRight="10dp"
         android:onClick="JoinGame"
         android:background="@drawable/shape" />
-   </TableRow>
-
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="60dp"
+           android:text="Join Multi-Round Game"
+           android:id="@+id/btnJoinMulti"
+           android:layout_weight="1"
+           android:onClick="JoinGame"
+           android:background="@drawable/shape" />
+        </LinearLayout>
     </TableLayout>
 </RelativeLayout>
