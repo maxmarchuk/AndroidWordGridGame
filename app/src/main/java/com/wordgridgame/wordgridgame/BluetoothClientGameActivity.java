@@ -38,7 +38,6 @@ public class BluetoothClientGameActivity extends Activity {
     GridLayout letterGrid;
     Button btnBackToMenu;
     Button btnDone;
-    Button clearButton;
     ListView mainListView;
     TextView player1ScoreTextView;
     TextView player2ScoreTextView;
@@ -71,7 +70,7 @@ public class BluetoothClientGameActivity extends Activity {
         init();
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
-        new CountDownTimer(1* 60000, 1000) {
+        new CountDownTimer(1* 15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -91,15 +90,6 @@ public class BluetoothClientGameActivity extends Activity {
             }
         }.start();
 
-        // On clicking clear button, empty the current word
-        clearButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //resetGrid();
-                    }
-                }
-        );
     }
 
     private void init() {
@@ -110,7 +100,6 @@ public class BluetoothClientGameActivity extends Activity {
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
-        clearButton = (Button) findViewById(R.id.btnClear);
 
         letters = new ArrayList<>();
         mNameList = new ArrayList();
@@ -126,13 +115,13 @@ public class BluetoothClientGameActivity extends Activity {
         clientConnectManager = bcm;
         board=(Board)bcm.readObject();
         gameType = (String)bcm.readObject();
-        for(int i=0;i<4;i++){
-            for(int j=0;j<4;j++)
-            {
-                System.out.print(board.board[i][j].letter);
-            }
-            System.out.println();
-        }
+//        for(int i=0;i<4;i++){
+//            for(int j=0;j<4;j++)
+//            {
+//                System.out.print(board.board[i][j].letter);
+//            }
+//            System.out.println();
+//        }
 
         // Populate the score mapping
         // *Key*: Word Length
@@ -315,7 +304,6 @@ public class BluetoothClientGameActivity extends Activity {
     private void initFonts() {
         FontManager fm = new FontManager();
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
     }
 

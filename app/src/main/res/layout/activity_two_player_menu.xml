@@ -37,7 +37,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:layout_below="@id/btnOnePlayer"
-        android:layout_alignStart="@+id/btnOnlinePlay"
         />
 
 </RelativeLayout>

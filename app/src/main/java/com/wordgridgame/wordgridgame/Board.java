@@ -133,10 +133,11 @@ public class Board  implements Serializable {
 
     //return current words
     public ArrayList<String> getWords(){
-        words.clear();
+//        words.clear();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
-                new RunTraversalTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, i, j);//board[i][j].traverse("");
+                board[i][j].traverse("");
+//                new RunTraversalTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, i, j);//board[i][j].traverse("");
             }
         }
 

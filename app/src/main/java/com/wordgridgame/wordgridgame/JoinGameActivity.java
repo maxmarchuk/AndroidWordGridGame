@@ -96,10 +96,15 @@ public class JoinGameActivity extends Activity {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try{unregisterReceiver(mReceiver);} catch (Exception e) {}
+    }
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
-
-
                System.out.println("on receive");
                 String action = intent.getAction();
                 // When discovery finds a device
@@ -174,16 +179,21 @@ public class JoinGameActivity extends Activity {
 
             Intent intent = null;
 
-            String isMultiround = getIntent().getExtras().getString("isMultiround");
-            if(!isMultiround.equals(null)){
-                if(isMultiround.equals("yes")) {
-                    intent = new Intent(getApplicationContext(), MultiroundClientActivity.class);
+            if(getIntent().getExtras() != null)
+            {
+                String isMultiround = getIntent().getExtras().getString("isMultiround");
+                if(isMultiround != null){
+                    if(isMultiround.equals("yes")) {
+                        intent = new Intent(getApplicationContext(), MultiroundClientActivity.class);
+                    }
                 }
-            }else {
+            } else {
                 intent = new Intent(getApplicationContext(),BluetoothClientGameActivity.class);
             }
 
             startActivity(intent);
+            unregisterReceiver(mReceiver);
+            finish();
         }
 
         /** Will cancel an in-progress connection, and close the socket */

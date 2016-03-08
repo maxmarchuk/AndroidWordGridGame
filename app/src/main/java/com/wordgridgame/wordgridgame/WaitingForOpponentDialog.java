@@ -1,9 +1,7 @@
 package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.TextView;
 
 public class WaitingForOpponentDialog extends Activity {
     @Override

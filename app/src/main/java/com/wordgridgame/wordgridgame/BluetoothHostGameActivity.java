@@ -74,7 +74,7 @@ public class BluetoothHostGameActivity extends Activity {
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
 
-        gameTimer= new CountDownTimer(1 * 60000, 1000) {
+        gameTimer= new CountDownTimer(1 * 15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -474,13 +474,6 @@ public class BluetoothHostGameActivity extends Activity {
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            currentWordText.setText("Waiting for player to join");
-//
-//                        }
-//                    });
 
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {

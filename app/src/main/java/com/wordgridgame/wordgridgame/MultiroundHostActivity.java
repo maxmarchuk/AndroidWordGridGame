@@ -1,21 +1,18 @@
 package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,22 +28,20 @@ import java.util.concurrent.TimeUnit;
 public class MultiroundHostActivity extends Activity {
     //bluetooth stuff
     public static int REQUEST_BLUETOOTH = 1;
+    public static int DEFAULT_TIMER_VALUE_MILLISECONDS = 30000;
     BluetoothAdapter BTAdapter;
     BluetoothConnectManager hostConnectManager;
 
     //gameplay stuff
-    CountDownTimer gameTimer;
+    CountDownTimer timer;
     boolean wordsGenerated = false;
     GridLayout letterGrid;
     Button btnBackToMenu;
     Button btnDone;
-    Button clearButton;
     ListView mainListView;
     TextView playerScoreTextView;
-    TextView player2ScoreTextView;
     ArrayAdapter mArrayAdapter;
-    ArrayList mNameList;
-    ArrayList clientWordList;
+    ArrayList wordList;
     HashMap<Integer, Integer> scoreMap;
     HillClimber hc;
     Board board = null;
@@ -54,53 +49,54 @@ public class MultiroundHostActivity extends Activity {
     ArrayList<String> letters;
     TextView timerText;
     ArrayList<Integer> buttonsClicked;
-    long timeBlinkInMilliSeconds = 60 * 1000;
     Integer currentScore;
-    protected static Activity BluetoothHostGameActivity;
-    Intent gameFinishIntent;
-    boolean gameDone = false;
-    boolean isClentConnected=false;
-    boolean isClientDone=false;
-    boolean isHostDone=false;
-    Integer gameNumber=null;
+    protected static Activity MultiroundHostActivity;
+    boolean CLIENT_CONNECTED = false;
+    boolean CLIENT_DONE = false;
+    boolean HOST_DONE = false;
+    boolean GAME_DONE = false;
+    Integer GAME_NUMBER = null;
+    Integer timeLeftInMillis;
+    Dialog waitingDialog;
+    BackgroundGridTask bgGridTask;
+
+
     String currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiround_host);
+        MultiroundHostActivity = this;
 
-        BluetoothHostGameActivity=this;
         init();
         initBluetooth();
+
         startGame();
     }
 
     private void startGame() {
-        if (gameNumber == null)
-            gameNumber = 0;
-
-        new BackgroundGridTask().execute();
-        if (gameNumber == 0) {
-            if (!isClentConnected) {//show some dialog and wait
-                // }
-            }
-
-        } else {
-            if (!isClientDone && !isHostDone) {
-                //wait
-            }
-
-
+        if (GAME_NUMBER == null) {
+            GAME_NUMBER = 0;
         }
-        sendBoard();
-        gameTimer.start();
-        currentScore = 0;
-        mNameList.clear();
 
+        bgGridTask = new BackgroundGridTask();
+        bgGridTask.execute();
 
+        waitingDialog.show();
     }
 
+    private void playGame() {
+        System.out.println("PLAYING GAME");
+        CLIENT_DONE = false;
+        HOST_DONE = false;
+
+        waitingDialog.hide();
+        currentScore = 0;
+        wordList.clear();
+        timer = createCountDownTimer(timeLeftInMillis);
+        timer.start();
+    }
 
 
 
@@ -129,7 +125,7 @@ public class MultiroundHostActivity extends Activity {
         }
 
         if (isInDictionary(word)) {
-            mNameList.add(word);
+            wordList.add(word);
             mArrayAdapter.notifyDataSetChanged();
             return;
         } else {
@@ -190,62 +186,64 @@ public class MultiroundHostActivity extends Activity {
     }
 
 
-
-
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             hc = new HillClimber(getApplicationContext());
             board = hc.climb();
-//            board.getWords();
+            System.out.println("created a new board in bggt");
             adaptBoardToCharList();
 
-            BluetoothHostGameActivity.runOnUiThread(new Runnable() {
+            MultiroundHostActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //Set the gridview's data to new list of letters
-                    letterGrid = (GridLayout) findViewById(R.id.gridLayout);
-
-                    for (int i = 0; i < 16; i++) {
-                        final Button btn = (Button) letterGrid.getChildAt(i);
-                        btn.setText(letters.get(i));
-                        btn.setTextSize(32.0f);
-                        btn.setTypeface(null, Typeface.BOLD);
-                        btn.setTag(i);
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Integer buttonIndex = (Integer) v.getTag();
-
-                                // If the button is clicked again, attempt to submit the word.
-                                if ((buttonsClicked.size() > 0) && (buttonsClicked.get(buttonsClicked.size() - 1) == buttonIndex)) {
-                                    String submittedWord = currentWordText.getText().toString();
-                                    boolean validWord = valid(submittedWord);
-
-                                    if (validWord) {
-                                        addWord(submittedWord);
-                                        resetGrid();
-                                    }
-                                    return;
-                                }
-
-                                // If the button is a valid button click (direct neighbor of last button clicked)
-                                if (isValidPick(buttonIndex)) {
-                                    v.setBackgroundResource(R.drawable.shape);
-                                    currentWordText.append(btn.getText());
-                                    buttonsClicked.add(buttonIndex);
-                                }
-                            }
-                        });
-                    }
+                    generateBoardLetters();
                 }
             });
             return null;
         }
     }
 
-    private boolean wordAlreadyAdded(String word){
-            return mNameList.contains(word);
+    private void generateBoardLetters() {
+        //Set the gridview's data to new list of letters
+        letterGrid = (GridLayout) findViewById(R.id.gridLayout);
+
+        for (int i = 0; i < 16; i++) {
+            final Button btn = (Button) letterGrid.getChildAt(i);
+            btn.setText(letters.get(i));
+            btn.setTextSize(32.0f);
+            btn.setTypeface(null, Typeface.BOLD);
+            btn.setTag(i);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer buttonIndex = (Integer) v.getTag();
+
+                    // If the button is clicked again, attempt to submit the word.
+                    if ((buttonsClicked.size() > 0) && (buttonsClicked.get(buttonsClicked.size() - 1) == buttonIndex)) {
+                        String submittedWord = currentWordText.getText().toString();
+                        boolean validWord = valid(submittedWord);
+
+                        if (validWord) {
+                            addWord(submittedWord);
+                            resetGrid();
+                        }
+                        return;
+                    }
+
+                    // If the button is a valid button click (direct neighbor of last button clicked)
+                    if (isValidPick(buttonIndex)) {
+                        v.setBackgroundResource(R.drawable.shape);
+                        currentWordText.append(btn.getText());
+                        buttonsClicked.add(buttonIndex);
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean wordAlreadyAdded(String word) {
+        return wordList.contains(word);
     }
 
     // returns false if the word isn't long enough or isn't in the dictionary of valid words
@@ -277,52 +275,22 @@ public class MultiroundHostActivity extends Activity {
 
 
     private void init() {
+        timeLeftInMillis = DEFAULT_TIMER_VALUE_MILLISECONDS;
 
-        btnDone.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isHostDone=true;
-                        hostConnectManager.sendObject(isHostDone);
-                    }
-                }
-        );
+        timer = createCountDownTimer(timeLeftInMillis);
 
-
-        gameTimer= new CountDownTimer(1 * 60000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                long ms = millisUntilFinished;
-                if (ms < timeBlinkInMilliSeconds) {
-                    // timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
-                }
-                String text = String.format("%02d : %02d",
-                        TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
-                        TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
-                timerText.setText(text);
-            }
-
-
-
-            public void onFinish() {
-                timerText.setText("0:00");
-                currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-                gameEnded();
-            }
-        };
         currentWordText = (TextView) findViewById(R.id.txtCurrentWord);
         // Grab activity elements
-        playerScoreTextView = (TextView) findViewById(R.id.txtPlayer1Score);
-        player2ScoreTextView = (TextView) findViewById(R.id.txtPlayer2Score);
+        playerScoreTextView = (TextView) findViewById(R.id.txtPlayerScore);
         mainListView = (ListView) findViewById(R.id.listSubmittedWords);
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
-        clearButton = (Button) findViewById(R.id.btnClear);
 
+        waitingDialog = new Dialog(this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        waitingDialog.setContentView(R.layout.activity_waiting_for_opponent_dialog);
         letters = new ArrayList<>();
-        mNameList = new ArrayList();
-        clientWordList = new ArrayList();
-        mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
+        wordList = new ArrayList();
+        mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, wordList);
         mainListView.setAdapter(mArrayAdapter);
         timerText = (TextView) findViewById(R.id.txtTimer);
         buttonsClicked = new ArrayList<>();
@@ -339,11 +307,17 @@ public class MultiroundHostActivity extends Activity {
         scoreMap.put(8, 11);
 
         initFonts();
-        gameFinishIntent =  new Intent(getBaseContext(), GameTwoPlayerDone.class);
+
+    }
+    public void onDoneButtonClick(View v){
+        roundDone();
     }
 
-    private void initBluetooth(){
-        currentWordText=(TextView)findViewById(R.id.txtCurrentWord);
+    private void sendMessageToClient(String message) {
+        hostConnectManager.sendObject(message);
+    }
+
+    private void initBluetooth() {
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!BTAdapter.isEnabled()) {
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -353,91 +327,140 @@ public class MultiroundHostActivity extends Activity {
         //start listening
         new AcceptThread().start();
     }
-    private void initFonts() {
-        FontManager fm = new FontManager();
-        btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-    }
-
-    public class BluetoothListenerTask extends AsyncTask<Void, Integer, Void> {
-        protected Void doInBackground(Void... params) {
-            while(!gameDone) {
-                Object tempObj;
-                tempObj = hostConnectManager.readObject();
-
-
-                try{
-                    isClientDone=(Boolean)tempObj;
-
-
-                } catch (Exception e) {}
-
-            }
-            return null;
-        }
-    }
-
-    private void sendBoard(){
-        BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager();
-        hostConnectManager=bluetoothConnectManager;
-        bluetoothConnectManager.sendObject(board);
-    }
-
-    private void gameEnded() {
-        gameDone = true;
-        //hostConnectManager.close();
-        currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-//        hostConnectManager.sendObject(currentScore);
-
-//        Integer clientScore = (Integer) hostConnectManager.readObject();
-
-        gameFinishIntent.putExtra("player1Score", currentScore);
-        gameFinishIntent.putExtra("player2Score", Integer.valueOf(player2ScoreTextView.getText().toString()));
-        gameFinishIntent.putExtra("foundWords", mNameList);
-        gameFinishIntent.putExtra("allWords", board.words);
-        finish();
-
-        startActivity(gameFinishIntent);
-    }
-
-    private void onRoundDone()
-    {
-        isHostDone=true;
-        gameNumber++;
-        currentTime= timerText.getText().toString();
-        gameTimer.cancel();
-        startGame();
-    }
-
-    private void addScoreToTime()
-    {
-        Integer score= Integer.parseInt(playerScoreTextView.getText().toString());
-        Integer newTime=Integer.parseInt(currentTime)+score*1000;
-        gameTimer= new CountDownTimer(newTime, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                long ms = millisUntilFinished;
-                if (ms < timeBlinkInMilliSeconds) {
-                    // timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
-                }
+    private CountDownTimer createCountDownTimer(Integer cdTime) {
+        return new CountDownTimer(cdTime, 1000) {
+            public void onTick(long ms) {
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
                         TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
                 timerText.setText(text);
             }
-
-
-
             public void onFinish() {
-                timerText.setText("0:00");
-                currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
-                gameEnded();
+                finishGame();
             }
         };
-        gameTimer.start();
+    }
+
+    private void initFonts() {
+        FontManager fm = new FontManager();
+        btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+        btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+    }
+
+    public class BluetoothListenerTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            while(!GAME_DONE) {
+                if (CLIENT_DONE && HOST_DONE) {
+                    MultiroundHostActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Client and host done. playing game.");
+                            sendBoard();
+                            System.out.println("Sent Board to Client");
+                            playGame();
+                        }
+                    });
+                }
+
+                Object tempObj;
+                tempObj = hostConnectManager.readObject();
+                try{
+                    System.out.println("object read, attempting casting");
+                    final String message= (String) tempObj;
+                    if(message != null) {
+                        if(message.equals("roundDone")) {
+                            System.out.println("roundDone received from client");
+                            MultiroundHostActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    receivedDoneStringFromClient();
+                                }
+                            });
+                        } else if(message.equals("gameDone")){
+                            System.out.println("gameDone received from client");
+                            MultiroundHostActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    receivedGameOverFromClient();
+                                }
+                            });
+                        } else if(message.equals("clientConnected")){
+                            System.out.println("client connected!");
+                            MultiroundHostActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    receivedClientConnectMessage();
+                                }
+                            });
+                        } else {
+                            System.out.println("Received an unknown string from client: " + message);
+                        }
+                    }
+                } catch (Exception e) {}
+            }
+            return null;
+        }
+    }
+
+    private void receivedClientConnectMessage() {
+        System.out.println("Client connected message received");
+        Toast.makeText(MultiroundHostActivity.this, "Client has connected.", Toast.LENGTH_SHORT).show();
+        sendBoard();
+        playGame();
+    }
+
+    private void receivedGameOverFromClient() {
+        Toast.makeText(MultiroundHostActivity.this, "You win! Your opponent's time has run out.", Toast.LENGTH_LONG).show();
+    }
+
+    private void receivedDoneStringFromClient() {
+        CLIENT_DONE = true;
+        Toast.makeText(MultiroundHostActivity.this, "Opponent has finished their round.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendBoard() {
+        System.out.println("sending board to client");
+        hostConnectManager.sendObject(board);
+    }
+
+    private void finishGame() {
+        timerText.setText("0:00");
+        Toast.makeText(MultiroundHostActivity.this, "Time's up! You lose!", Toast.LENGTH_LONG).show();
+        sendMessageToClient("gameDone");
+        finish();
+    }
+
+    private void roundDone() {
+        this.hc = new HillClimber(getApplicationContext());
+        this.board = hc.climb();
+        adaptBoardToCharList();
+        generateBoardLetters();
+
+        timer.cancel();
+        sendMessageToClient("roundDone");
+
+        int currentTimeInMillis = getMillisFromTimeString(timerText.getText().toString());
+        timeLeftInMillis = ((currentScore * 1000) + currentTimeInMillis);
+        currentScore = 0;
+        playerScoreTextView.setText("0");
+        timerText.setText("0:00");
 
 
+        System.out.println("New Time = " + timeLeftInMillis);
+
+        GAME_NUMBER++;
+        HOST_DONE = true;
+
+        waitingDialog.show();
+    }
+
+    // Takes time in format of 01:23
+    // returns (60 + 23) * 1000
+    public Integer getMillisFromTimeString(String time) {
+        String[] units = time.split(":"); //will break the string up into an array
+        int minutes = Integer.parseInt(units[0].replace(" ", "")); //first element
+        int seconds = Integer.parseInt(units[1].replace(" ", "")); //second element
+        return ((60 * minutes + seconds) * 1000); //add up our values
     }
 
     private class AcceptThread extends Thread {
@@ -450,7 +473,9 @@ public class MultiroundHostActivity extends Activity {
             try {
                 // MY_UUID is the app's UUID string, also used by the client code
                 tmp = BTAdapter.listenUsingRfcommWithServiceRecord("cs554team4", UUID.fromString("28901242-e667-40eb-bf4d-af5b6555e712"));
-            } catch (IOException e) { System.out.println("listening error:"+e.toString());}
+            } catch (IOException e) {
+                System.out.println("listening error:" + e.toString());
+            }
             mmServerSocket = tmp;
         }
 
@@ -459,61 +484,44 @@ public class MultiroundHostActivity extends Activity {
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            currentWordText.setText("Waiting for player to join");
-//
-//                        }
-//                    });
-
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
                     break;
                 }
                 // If a connection was accepted
                 if (socket != null) {
-                    BluetoothConnectManager.mmSocket=socket;
-
+                    BluetoothConnectManager.mmSocket = socket;
+                    hostConnectManager = new BluetoothConnectManager();
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Connection with other player successful", Toast.LENGTH_SHORT).show();
-                            currentWordText.setText("");
-                        }
-                    });
-
-
-                    //send board
-
-
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                            receivedClientConnectMessage();
                             new BluetoothListenerTask().execute();
                         }
                     });
 
-
                     try {
                         mmServerSocket.close();
-                    }catch (IOException e) {
+                    } catch (IOException e) {
                         break;
                     }
-                }else{
+                } else {
                     currentWordText.setText("ERROR: Bluetooth server socket is null");
                 }
 
             }
         }
 
-        /** Will cancel the listening socket, and cause the thread to finish */
+        /**
+         * Will cancel the listening socket, and cause the thread to finish
+         */
         public void cancel() {
             try {
                 mmServerSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
 }

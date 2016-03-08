@@ -79,9 +79,8 @@
 
         <activity
             android:name=".WaitingForOpponentDialog"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_waiting_for_opponent_dialog"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            />
     </application>
 
 </manifest>
