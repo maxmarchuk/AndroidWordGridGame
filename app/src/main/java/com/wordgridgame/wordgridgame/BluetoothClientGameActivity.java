@@ -420,7 +420,6 @@ public class BluetoothClientGameActivity extends Activity {
         return board.dict.contains(word);
     }
 
-
     public void goToPreviousActivity(View v){
         finish();
     }

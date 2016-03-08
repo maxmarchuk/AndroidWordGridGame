@@ -77,8 +77,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
-
+        <activity
+            android:name=".WaitingForOpponentDialog"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_waiting_for_opponent_dialog"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>
