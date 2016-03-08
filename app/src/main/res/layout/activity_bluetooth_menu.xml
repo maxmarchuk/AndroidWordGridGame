@@ -80,7 +80,7 @@
                 android:text="Multi Round"
                 android:id="@+id/btnMulti"
                 android:layout_weight="1"
-                android:onClick="CreateGame"
+                android:onClick="CreateMultiroundGame"
                 android:background="@drawable/shape"
                 android:layout_marginRight="10dp"
                 />
@@ -121,7 +121,7 @@
            android:text="Join Multi-Round Game"
            android:id="@+id/btnJoinMulti"
            android:layout_weight="1"
-           android:onClick="JoinGame"
+           android:onClick="JoinMultiroundGame"
            android:background="@drawable/shape" />
         </LinearLayout>
     </TableLayout>

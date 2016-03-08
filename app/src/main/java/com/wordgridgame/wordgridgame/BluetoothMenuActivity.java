@@ -32,4 +32,16 @@ public class BluetoothMenuActivity extends Activity {
         startActivity(intent);
     }
 
+    public void CreateMultiroundGame(View view){
+        Intent intent = new Intent(getApplicationContext(),MultiroundHostActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void JoinMultiroundGame(View view){
+        Intent intent = new Intent(getApplicationContext(),MultiroundClientActivity.class);
+        startActivity(intent);
+
+    }
+
 }
