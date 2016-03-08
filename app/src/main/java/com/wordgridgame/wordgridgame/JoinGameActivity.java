@@ -171,9 +171,19 @@ public class JoinGameActivity extends Activity {
             //set up connectManager and go to new Activity
             BluetoothConnectManager.mmSocket=this.mmSocket;
 
-            Intent intent=new Intent(getApplicationContext(),BluetoothClientGameActivity.class);
-            startActivity(intent);
 
+            Intent intent = null;
+
+            String isMultiround = getIntent().getExtras().getString("isMultiround");
+            if(!isMultiround.equals(null)){
+                if(isMultiround.equals("yes")) {
+                    intent = new Intent(getApplicationContext(), MultiroundClientActivity.class);
+                }
+            }else {
+                intent = new Intent(getApplicationContext(),BluetoothClientGameActivity.class);
+            }
+
+            startActivity(intent);
         }
 
         /** Will cancel an in-progress connection, and close the socket */

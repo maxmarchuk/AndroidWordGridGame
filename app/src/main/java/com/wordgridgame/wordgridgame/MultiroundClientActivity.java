@@ -75,6 +75,9 @@ public class MultiroundClientActivity extends Activity {
         }
         waitingDialog.hide();
 
+        CLIENT_DONE = false;
+        HOST_DONE = false;
+
         getBoardFromHost();
         new BackgroundGridTask().execute();
 
@@ -160,9 +163,7 @@ public class MultiroundClientActivity extends Activity {
                             System.out.println("Received an unkown string from host: " + message);
                         }
                     }
-                } catch (Exception e) {
-
-                }
+                } catch (Exception e) {}
 
             }
             return null;
@@ -178,12 +179,22 @@ public class MultiroundClientActivity extends Activity {
     private void receivedDoneStringFromHost() {
         HOST_DONE = true;
         Toast.makeText(MultiroundClientActivity.this, "Opponent has finished their round.", Toast.LENGTH_SHORT).show();
-
     }
+
     private void roundDone() {
         int currentTimeInMillis = getMillisFromTimeString(timerText.getText().toString());
         timeLeftInMillis = ((currentScore * 1000) + currentTimeInMillis);
         timer.cancel();
+        sendMessageToHost("roundDone");
+        CLIENT_DONE = true;
+        GAME_NUMBER++;
+        currentScore = 0;
+        playerScoreTextView.setText("");
+
+        startGame();
+    }
+    private void sendMessageToHost(String message) {
+        clientConnectManager.sendObject(message);
     }
 
     // Takes time in format of 01:23
@@ -197,6 +208,7 @@ public class MultiroundClientActivity extends Activity {
 
     private void getBoardFromHost(){
         System.out.println("!! Getting board from host");
+
         board=(Board)clientConnectManager.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
@@ -213,6 +225,7 @@ public class MultiroundClientActivity extends Activity {
         finishGame();
     }
     private void finishGame() {
+        clientConnectManager.close();
         finish();
     }
 
@@ -302,8 +315,7 @@ public class MultiroundClientActivity extends Activity {
     }
 
     public void onDoneButtonClick(View v) {
-        //TODO: implement this for multiround
-        finish();
+        roundDone();
     }
 
 
