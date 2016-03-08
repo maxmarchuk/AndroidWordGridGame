@@ -38,11 +38,14 @@ public class ShakerDemo extends Activity implements Shaker.Callback {
         Log.d("ShakerDemo", "Shaking stopped!");
         //transcript.setText(transcript.getText().toString() + "Shaking stopped\n");
         //scroll.fullScroll(View.FOCUS_DOWN);
-
+        Intent intent = new Intent (getApplicationContext(), SinglePlayerActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     public void goToSingleplayer(View v){
         Intent intent = new Intent (getApplicationContext(), SinglePlayerActivity.class);
+        finish();
         startActivity(intent);
     }
 }

@@ -70,6 +70,7 @@ public class BluetoothClientGameActivity extends Activity {
         //initialize everything
         init();
         new BackgroundGridTask().execute();
+        new GenerateWordListTask().execute();
         new CountDownTimer(1* 30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -124,7 +125,6 @@ public class BluetoothClientGameActivity extends Activity {
         BluetoothConnectManager bcm=new BluetoothConnectManager();
         clientConnectManager = bcm;
         board=(Board)bcm.readObject();
-        new GenerateWordListTask().execute();
         gameType = (String)bcm.readObject();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++)
@@ -213,6 +213,7 @@ public class BluetoothClientGameActivity extends Activity {
         gameFinishIntent.putExtra("player2Score", currentScore);
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
+        finish();
         startActivity(gameFinishIntent);
     }
     private Integer getPlayer2Score(){
@@ -264,8 +265,6 @@ public class BluetoothClientGameActivity extends Activity {
     public class BackgroundGridTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            //hc = new HillClimber(getApplicationContext());
-            //board = hc.climb();
             adaptBoardToCharList();
 
             runOnUiThread(new Runnable() {
@@ -276,7 +275,6 @@ public class BluetoothClientGameActivity extends Activity {
 
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
-                        btn.setText(letters.get(i));
                         btn.setText(letters.get(i));
                         btn.setTextSize(32.0f);
                         btn.setTypeface(null, Typeface.BOLD);

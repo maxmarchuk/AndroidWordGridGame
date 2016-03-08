@@ -2,6 +2,7 @@ package com.wordgridgame.wordgridgame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -100,8 +101,6 @@ public class CutthroatActivity extends Activity {
         init();
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
-
-//        adaptBoardToCharList();
 
         new CountDownTimer(1 * 30000, 1000) {
 
@@ -280,6 +279,8 @@ public class CutthroatActivity extends Activity {
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
+                        btn.setTextSize(32.0f);
+                        btn.setTypeface(null, Typeface.BOLD);
                         btn.setTag(i);
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -349,6 +350,7 @@ public class CutthroatActivity extends Activity {
         gameFinishIntent.putExtra("player2Score", getPlayer2Score());
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
+        finish();
         startActivity(gameFinishIntent);
     }
     public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {

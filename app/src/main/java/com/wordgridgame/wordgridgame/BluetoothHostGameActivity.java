@@ -120,6 +120,8 @@ public class BluetoothHostGameActivity extends Activity {
         gameFinishIntent.putExtra("player2Score", Integer.valueOf(player2ScoreTextView.getText().toString()));
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
+        finish();
+
         startActivity(gameFinishIntent);
     }
 
@@ -419,7 +421,6 @@ public class BluetoothHostGameActivity extends Activity {
                     for (int i = 0; i < 16; i++) {
                         final Button btn = (Button) letterGrid.getChildAt(i);
                         btn.setText(letters.get(i));
-                        btn.setText(letters.get(i));
                         btn.setTextSize(32.0f);
                         btn.setTypeface(null, Typeface.BOLD);
                         btn.setTag(i);
@@ -485,13 +486,13 @@ public class BluetoothHostGameActivity extends Activity {
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            currentWordText.setText("Waiting for player to join");
-
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            currentWordText.setText("Waiting for player to join");
+//
+//                        }
+//                    });
 
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
@@ -510,7 +511,6 @@ public class BluetoothHostGameActivity extends Activity {
                     });
                     BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
                     hostConnectManager=bluetoothConnectManager;
-                    new BluetoothListenerTask().execute();
                     //send board
                     bluetoothConnectManager.sendObject(board);
                     bluetoothConnectManager.sendObject(gameType);
@@ -524,12 +524,6 @@ public class BluetoothHostGameActivity extends Activity {
                     }
 
                     gameTimer.start();
-                    BluetoothHostGameActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            currentWordText.setText("");
-                        }
-                    });
 
                     try {
                         mmServerSocket.close();

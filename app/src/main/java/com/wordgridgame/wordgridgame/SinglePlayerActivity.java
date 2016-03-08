@@ -47,10 +47,11 @@ public class SinglePlayerActivity extends Activity {
     Board board = null;
     TextView currentWordText;
     ArrayList<String> letters;
-    TextView timerText;
+    Button timerText;
     ArrayList<Integer> buttonsClicked;
     AlertDialog.Builder usernameBuilder;
     AlertDialog.Builder foundAndAllWords;
+    CountDownTimer timer;
     long timeBlinkInMilliSeconds = 60 * 1000;
     protected static Activity singplePlayerActivity;
     /**
@@ -68,12 +69,11 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu = (Button) findViewById(R.id.btnBack);
         btnDone = (Button) findViewById(R.id.btnDone);
         clearButton = (Button) findViewById(R.id.btnClear);
-        showWords = (Button) findViewById(R.id.btnShowWords);
         letters = new ArrayList<>();
         mNameList = new ArrayList();
         mArrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        timerText = (TextView) findViewById(R.id.txtTimer);
+        timerText = (Button) findViewById(R.id.txtTimer);
         buttonsClicked = new ArrayList<>();
 
         //Set up username dialog
@@ -137,23 +137,23 @@ public class SinglePlayerActivity extends Activity {
         new GenerateWordListTask().execute();
 //        adaptBoardToCharList();
 
-        new CountDownTimer(5 * 3000, 1000) {
+        timer = new CountDownTimer(5 * 3000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
-                if (ms < timeBlinkInMilliSeconds) {
-//                    timerText.setTextAppearance(getApplicationContext(), R.style.blinkText);
-                }
+
                 String text = String.format("%02d : %02d",
                         TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
                         TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
                 timerText.setText(text);
+                timerText.setTextSize(20);
             }
 
             public void onFinish() {
                 finishGame();
             }
-        }.start();
+        };
+        timer.start();
 
         // On clicking clear button, empty the current word
         clearButton.setOnClickListener(
@@ -223,6 +223,7 @@ public class SinglePlayerActivity extends Activity {
 
     private void finishGame(){
         timerText.setText("-:--");
+        timer.cancel();
         Integer currentScore = getCurrentScore();
 
         if (PlayerInfoHelper.isNewScore(currentScore, getApplicationContext())) {
@@ -237,6 +238,7 @@ public class SinglePlayerActivity extends Activity {
         gameFinishIntent.putExtra("score", getCurrentScore());
         gameFinishIntent.putExtra("foundWords", mNameList);
         gameFinishIntent.putExtra("allWords", board.words);
+        finish();
         startActivity(gameFinishIntent);
     }
 
@@ -404,11 +406,10 @@ public class SinglePlayerActivity extends Activity {
         btnBackToMenu.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         clearButton.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
         btnDone.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        showWords.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
     }
 
     public void goToPreviousActivity(View v) {
-        finish();
+        goToMainMenuActivity(v);
     }
 
     public class GenerateWordListTask extends AsyncTask<Void, Integer, Void> {
@@ -420,5 +421,11 @@ public class SinglePlayerActivity extends Activity {
 
     public Integer getCurrentScore() {
         return Integer.parseInt(playerScoreTextView.getText().toString());
+    }
+
+    public void goToMainMenuActivity(View view){
+        timer.cancel();
+        Intent intent=new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(intent);
     }
 }
