@@ -1,6 +1,7 @@
 package com.wordgridgame.wordgridgame;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -52,6 +53,8 @@ public class Board  implements Serializable {
                 return;
             if(dict.contains(soFar) && !words.contains(soFar)) {
                 if(soFar.length() > 2) {
+                    System.out.println(" #####    " + soFar);
+
                     words.add(soFar);
                 }
             }
@@ -133,10 +136,17 @@ public class Board  implements Serializable {
         words.clear();
         for(int i=0;i<4;i++){
             for(int j=0;j<4;j++){
-                board[i][j].traverse("");
+                new RunTraversalTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, i, j);//board[i][j].traverse("");
             }
         }
 
         return words;
+    }
+
+    public class RunTraversalTask extends AsyncTask<Integer, Integer, Void> {
+        protected Void doInBackground(Integer... ints) {
+            board[ints[0]][ints[1]].traverse("");
+            return null;
+        }
     }
 }

@@ -71,7 +71,7 @@ public class BluetoothClientGameActivity extends Activity {
         init();
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
-        new CountDownTimer(1* 30000, 1000) {
+        new CountDownTimer(1* 60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -85,7 +85,7 @@ public class BluetoothClientGameActivity extends Activity {
             }
 
             public void onFinish() {
-                timerText.setText("Done");
+                timerText.setText("0:00");
                 currentScore = getPlayer2Score();
                 gameEnded();
             }
@@ -166,7 +166,6 @@ public class BluetoothClientGameActivity extends Activity {
                         });
                     }
                 } catch (Exception e) {
-                    System.out.println("Object not an integer: " + e.getMessage());
                 }
                 try{
                     final String newWord= (String) tempObj;
@@ -179,7 +178,6 @@ public class BluetoothClientGameActivity extends Activity {
                         });
                     }
                 } catch (Exception e) {
-                    System.out.println("Object not an String: " + e.getMessage());
                 }
 
             }
@@ -188,17 +186,14 @@ public class BluetoothClientGameActivity extends Activity {
     }
 
     private void setHostScore(Integer newScore){
-        System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
         player1ScoreTextView.setText(newScore.toString());
     }
 
     private void addHostWord(String newWord) {
-        System.out.println("!!! ADDING NEW WORD: " + newWord);
         hostWordList.add(newWord);
     }
 
     private void sendNewClientWord(String newWord) {
-        System.out.println("!!! SENDING WORD: " + newWord);
         clientConnectManager.sendObject(newWord);
     }
 
@@ -392,7 +387,6 @@ public class BluetoothClientGameActivity extends Activity {
         }
     }
     private void sendNewClientScore(Integer newScore) {
-        System.out.println("!!! SENDING SCORE: " + newScore);
         clientConnectManager.sendObject(newScore);
     }
 

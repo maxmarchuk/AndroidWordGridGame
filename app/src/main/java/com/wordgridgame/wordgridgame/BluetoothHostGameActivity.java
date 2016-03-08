@@ -76,7 +76,7 @@ public class BluetoothHostGameActivity extends Activity {
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
 
-        gameTimer= new CountDownTimer(1 * 30000, 1000) {
+        gameTimer= new CountDownTimer(1 * 60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
@@ -92,7 +92,7 @@ public class BluetoothHostGameActivity extends Activity {
 
 
             public void onFinish() {
-                timerText.setText("Done");
+                timerText.setText("0:00");
                 currentScore = Integer.parseInt(playerScoreTextView.getText().toString());
                 gameEnded();
             }
@@ -204,10 +204,8 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private boolean wordAlreadyAdded(String word){
-        System.out.println("CLIENT WORD LIST: " + clientWordList);
         if(gameType.equals("cutthroat")){
             boolean contains = (mNameList.contains(word) || clientWordList.contains(word));
-            System.out.println("CONTAINS THE WORD: " + contains);
             return contains;
         } else if (gameType.equals("basic")){
             return mNameList.contains(word);
@@ -272,12 +270,10 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private void sendNewHostScore(Integer newScore) {
-        System.out.println("!!! SENDING SCORE: " + newScore);
         hostConnectManager.sendObject(newScore);
     }
 
     private void sendNewHostWord(String newWord) {
-        System.out.println("!!! SENDING WORD: " + newWord);
         hostConnectManager.sendObject(newWord);
     }
     private void resetGridCellColors() {
@@ -369,9 +365,7 @@ public class BluetoothHostGameActivity extends Activity {
                             }
                         });
                     }
-                } catch (Exception e) {
-                    System.out.println("Object not an integer");
-                }
+                } catch (Exception e) {}
 
                 try{
                     final String newWord= (String) tempObj;
@@ -383,9 +377,7 @@ public class BluetoothHostGameActivity extends Activity {
                             }
                         });
                     }
-                } catch (Exception e) {
-                    System.out.println("Object not an String: " + e.getMessage());
-                }
+                } catch (Exception e) {}
 
             }
             return null;
@@ -393,13 +385,11 @@ public class BluetoothHostGameActivity extends Activity {
     }
 
     private void setClientScore(Integer newScore){
-        System.out.println("!!! RECEIVING SCORE: " + newScore.toString());
         player2ScoreTextView.setText(newScore.toString());
     }
 
 
     private void addClientWord(String newWord) {
-        System.out.println("!!! ADDING NEW CLIENT WORD: " + newWord);
         clientWordList.add(newWord);
     }
 
@@ -511,10 +501,17 @@ public class BluetoothHostGameActivity extends Activity {
                     });
                     BluetoothConnectManager bluetoothConnectManager = new BluetoothConnectManager(socket);
                     hostConnectManager=bluetoothConnectManager;
+
                     //send board
                     bluetoothConnectManager.sendObject(board);
                     bluetoothConnectManager.sendObject(gameType);
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new BluetoothListenerTask().execute();
+                        }
+                    });
                     for(int i=0;i<4;i++){
                         for(int j=0;j<4;j++)
                         {
