@@ -70,7 +70,7 @@ public class BluetoothClientGameActivity extends Activity {
         init();
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
-        new CountDownTimer(1* 15000, 1000) {
+        new CountDownTimer(1* 30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;

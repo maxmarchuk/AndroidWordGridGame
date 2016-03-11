@@ -85,8 +85,6 @@ public class PlayerInfoHelper {
         }catch (Exception e){System.out.println(e.toString());}
 
         return list;
-
-
     }
 
     private  static void sortByValue(ArrayList<String> list){

@@ -132,6 +132,7 @@ public class MultiroundClientActivity extends Activity {
         protected Void doInBackground(Void... params) {
             while (!GAME_DONE) {
                 if (CLIENT_DONE && HOST_DONE) {
+                    System.out.println("BOTH ARE TRUE");
                     MultiroundClientActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -193,6 +194,7 @@ public class MultiroundClientActivity extends Activity {
         timeLeftInMillis = ((currentScore * 1000) + currentTimeInMillis);
         timer.cancel();
         sendMessageToHost("roundDone");
+        waitingDialog.show();
         GAME_NUMBER++;
         currentScore = 0;
         playerScoreTextView.setText("0");

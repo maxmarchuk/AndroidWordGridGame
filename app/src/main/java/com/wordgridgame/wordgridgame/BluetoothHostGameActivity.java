@@ -74,7 +74,7 @@ public class BluetoothHostGameActivity extends Activity {
         new BackgroundGridTask().execute();
         new GenerateWordListTask().execute();
 
-        gameTimer= new CountDownTimer(1 * 15000, 1000) {
+        gameTimer= new CountDownTimer(1 * 30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long ms = millisUntilFinished;
